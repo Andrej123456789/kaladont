@@ -13,9 +13,7 @@ typedef struct Start
     bool kaladont_allowed;
     uint64_t players;
 
-    char json_path[NAME_MAX];
     char words_path[NAME_MAX];
-
     char **words;
 } Start;
 

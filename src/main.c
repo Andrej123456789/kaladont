@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <unistd.h>
 
+#include <json-c/json.h>
 #include "headers/gameplay.h"
 
 void cleanup(Start* _start)
@@ -11,19 +12,45 @@ void cleanup(Start* _start)
     free(_start->words);
 }
 
-void start(Start* _start)
+void start(Start* _start, char* path)
 {
+    /* Load JSON */
+    struct json_object_iterator it;
+    struct json_object_iterator itEnd;
+
+    json_object* root = json_object_from_file(path);
+    it = json_object_iter_init_default();
+    it = json_object_iter_begin(root);
+    itEnd = json_object_iter_end(root);
+
+    while (!json_object_iter_equal(&it, &itEnd)) 
+    {
+        const char* key = json_object_iter_peek_name(&it);
+        json_object* val = json_object_iter_peek_value(&it);
+
+        if (strcmp(key, "kaladont_allowed") == 0)
+        {
+            _start->kaladont_allowed = json_object_get_boolean(val);
+        }
+
+        else if (strcmp(key, "players") == 0)
+        {
+            _start->players = json_object_get_uint64(val);
+        }
+
+        else if (strcmp(key, "words_path") == 0)
+        {
+            strcpy(_start->words_path, json_object_get_string(val));
+        }
+
+        json_object_iter_next(&it);
+    }
+
+    json_object_put(root);
+
     /* Load words */
     FILE* file;
     char buffer[255];
-
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) 
-    {
-       printf("Current working dir: %s\n", cwd);
-    }
-
-    strcpy(_start->words_path, "words.txt");
 
     file = fopen(_start->words_path, "r");
     if (file == NULL)
@@ -58,23 +85,13 @@ void start(Start* _start)
     }
 
     fclose(file);
-
-    // For example, let's print the words
-    for (uint64_t j = 0; j < word_count; j++) {
-        printf("Word %ld: %s\n", j + 1, _start->words[j]);
-    }
-
-    // Free the allocated memory
-    for (uint64_t j = 0; j < word_count; j++) {
-        free(_start->words[j]);
-    }
 }
 
 int main()
 {
     Start* _start = malloc(sizeof(Start));
 
-    start(_start);
+    start(_start, "settings.json");
     cleanup(_start);
 
     return 0;
