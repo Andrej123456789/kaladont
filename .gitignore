@@ -1,2 +1,2 @@
-/executable
-/objects
+/src/executable/*
+/src/objects/*
