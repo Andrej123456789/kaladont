@@ -90,9 +90,11 @@ void start(Start* _start, char* path)
 int main()
 {
     Start* _start = malloc(sizeof(Start));
+    Gameplay* _gameplay = malloc(sizeof(Gameplay));
 
     start(_start, "settings/settings.json");
-    cleanup(_start);
+    gameplay(_gameplay, _start);
 
+    cleanup(_start);
     return 0;
 }
