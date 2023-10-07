@@ -91,7 +91,7 @@ int main()
 {
     Start* _start = malloc(sizeof(Start));
 
-    start(_start, "settings.json");
+    start(_start, "settings/settings.json");
     cleanup(_start);
 
     return 0;

@@ -1,5 +1,5 @@
 {
     "kaladont-allowed": true,
     "players": 20,
-    "words_path": "words.txt"
+    "words_path": "settings/words.txt"
 }
