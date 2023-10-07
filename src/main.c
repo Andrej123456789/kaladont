@@ -7,11 +7,19 @@
 #include <json-c/json.h>
 #include "headers/gameplay.h"
 
+/**
+ * Free all allocated stuff
+*/
 void cleanup(Start* _start)
 {
     free(_start->words);
 }
 
+/**
+ * Load settings and words list
+ * @param _start `Start` struct, destination
+ * @param path path to `.json` file 
+*/
 void start(Start* _start, char* path)
 {
     /* Load JSON */
@@ -35,7 +43,16 @@ void start(Start* _start, char* path)
 
         else if (strcmp(key, "players") == 0)
         {
-            _start->players = json_object_get_uint64(val);
+            if (json_object_get_uint64(val) < UINT64_MAX)
+            {
+                _start->players = json_object_get_uint64(val);
+            }
+
+            else
+            {
+                printf("Number of players (%ld) is higher than maximum (%ld - 1)!\n", json_object_get_uint64(val), UINT64_MAX);
+                printf("Setting number of players to default, 20.\n");
+            }
         }
 
         else if (strcmp(key, "words_path") == 0)
@@ -87,6 +104,9 @@ void start(Start* _start, char* path)
     fclose(file);
 }
 
+/**
+ * Entry point
+*/
 int main()
 {
     Start* _start = malloc(sizeof(Start));

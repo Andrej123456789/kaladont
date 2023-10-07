@@ -24,12 +24,6 @@ void denx_cstring_IncreaseCapacity(void* ptr)
     }
 }
 
-/**********************************************/
-/*
-/* CString Function Members Implementation
-/*
-/**********************************************/
-
 void* CStringCreate()
 {
     denx_cstring* string = (denx_cstring*)calloc(1, sizeof(denx_cstring));
