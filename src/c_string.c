@@ -24,6 +24,8 @@ void denx_cstring_IncreaseCapacity(void* ptr)
     }
 }
 
+/* ------------------------------------ */
+
 void* CStringCreate()
 {
     denx_cstring* string = (denx_cstring*)calloc(1, sizeof(denx_cstring));
@@ -192,7 +194,6 @@ char* CStringBack(void* ptr)
     return NULL;
 }
 
-// Returns the maximum number of characters a CString can hold.
 const size_t CStringMaxSize()
 {
     return 0;
@@ -286,15 +287,12 @@ size_t CStringShrinkToFit(void* ptr)
     return (old_cap - new_cap); 
 }
 
-// TODO: If the index is 0, nothing is inserted(NEEDS IMPLEMENTATION)
-// TODO: If the index is greater than 0, a 'Segmentation-Fault' is thrown.
-// TODO: Size and length must be updated.
 size_t CStringInsert(void* ptr, char c, size_t indx)
 {
-     if(ptr == NULL)
-     {
-         return 1;
-     }
+    if(ptr == NULL)
+    {
+        return 1;
+    }
 
     // Here we can use `CStringPushBack` instead.
     if(CSTRING_REF(ptr)->string == NULL)
@@ -722,8 +720,6 @@ size_t CStringFind(void* ptr, const char* chrs)
     return index;
 }
 
-// !TODO: This function does not work properly. Needs to be re-thinked/re-written.
-// !>BUG
 size_t CStringRFind(void* ptr, const char* chrs)
 {
     if(ptr == NULL || chrs == NULL)
@@ -788,8 +784,6 @@ size_t CStringFindFirstNotOf(void* ptr, const char* chrs)
     return -1;
 }
 
-// !TODO: Like `CStringFindLastOf`, this function doesn't actually work
-// !BUG
 size_t CStringFindLastNotOf(void* ptr, const char* chrs)
 {
     if(ptr == NULL || CSTRING_REF(ptr)->string == NULL || chrs == NULL)
