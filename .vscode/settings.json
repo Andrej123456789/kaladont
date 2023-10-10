@@ -5,6 +5,8 @@
         "stdlib.h": "c",
         "stdio.h": "c",
         "limits.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "c_vector.h": "c",
+        "c_string.h": "c"
     }
 }

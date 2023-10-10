@@ -2,8 +2,8 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-
 #include <limits.h>
+#include <time.h>
 
 #include "c_string.h"
 #include "c_vector.h"
@@ -13,7 +13,6 @@
  * @param kaladont_allowed is word `kaladont` allowed
  * @param players number of players
  * @param words_path path to words file
- * @param words list of all available words
 */
 typedef struct Start
 {
@@ -21,19 +20,71 @@ typedef struct Start
     uint64_t players;
 
     char words_path[NAME_MAX];
-    char **words;
 } Start;
 
 /**
  * Struct containing gameplay informations
+ * @param current_word current word
  * @param player id of current player
  * @param timeline used words in current game
+ * @param words list of all available words
 */
 typedef struct Gameplay
 {
+    char* current_word;
     uint64_t player;
-    cvector_vector_type(void*) timeline;
+    cvector_vector_type(char*) timeline;
+    cvector_vector_type(char*) words;
 } Gameplay;
+
+/* ------------------------------------ */
+
+/**
+ * # IMPROVE THIS FUNCTION
+ * @brief Finds element in c_vector
+ * @param vec vector
+ * @param str string (element)
+ * @return bool
+*/
+bool find_element(cvector_vector_type(char*) vec, char* str);
+
+/**
+ * Get last N characters
+ * @param input string
+ * @param N number of characters we are comparing
+ * @return char*
+*/
+char* get_last_N_characters(const char* input, int N);
+
+/**
+ * Get first N characters
+ * @param input string
+ * @param N number of characters we are comparing
+ * @return char*
+*/
+char* get_first_N_characters(const char* input, int N);
+
+/* ------------------------------------ */
+
+/**
+ * Set current player to next player
+ * @param _gameplay `Gameplay` struct
+ * @param _start `Start` struct
+*/
+void next_player(Gameplay* _gameplay, Start* _start);
+
+/**
+ * Get random word from `words` list
+ * @param _gameplay `Gameplay` struct
+ * @return char*
+*/
+char* random_word(Gameplay* _gameplay);
+
+/**
+ * Get random word from `random_word`, push back it to `timeline` and copy it to `current_word`
+ * @param _gameplay `Gameplay` struct
+*/
+void set_random_word(Gameplay* _gameplay);
 
 /**
  * Entry point to gameplay mechanics

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <limits.h>
 #include <unistd.h>
@@ -9,18 +10,23 @@
 
 /**
  * Free all allocated stuff
+ * @param _gameplay `Gameplay` struct
 */
-void cleanup(Start* _start)
+void cleanup(Gameplay* _gameplay)
 {
-    free(_start->words);
+    free(_gameplay->current_word);
+
+    cvector_free(_gameplay->timeline);
+    cvector_free(_gameplay->words);
 }
 
 /**
  * Load settings and words list
+ * @param _gameplay `Gameplay` struct, destination for words list
  * @param _start `Start` struct, destination
  * @param path path to `.json` file 
 */
-void start(Start* _start, char* path)
+void start(Gameplay* _gameplay, Start* _start, char* path)
 {
     /* Load JSON */
     struct json_object_iterator it;
@@ -76,27 +82,11 @@ void start(Start* _start, char* path)
         return;
     }
 
-    uint64_t word_count = 0;
-    while (fgets(buffer, sizeof(buffer), file))
-    {
-        word_count += 1;
-    }
-
-    _start->words = (char**)malloc(word_count * sizeof(char*));
-    if (_start->words == NULL)
-    {
-        printf("Failed to allocate memory space!\n");
-    }
-
-    rewind(file);
-
     uint64_t i = 0;
     while (fgets(buffer, sizeof(buffer), file))
     {
-        buffer[strcspn(buffer, "\n")] = '\0';
-
-        _start->words[i] = (char*)malloc((strlen(buffer) + 1) * sizeof(char));
-        strcpy(_start->words[i], buffer);
+        buffer[strcspn(buffer, "\n")] = '\0'; /* remove \n */
+        cvector_push_back(_gameplay->words, strdup(buffer));
 
         i += 1;
     }
@@ -112,9 +102,11 @@ int main()
     Start* _start = malloc(sizeof(Start));
     Gameplay* _gameplay = malloc(sizeof(Gameplay));
 
-    start(_start, "settings/settings.json");
+    _gameplay->current_word = malloc(sizeof(char) * 1024);
+
+    start(_gameplay, _start, "settings/settings.json");
     gameplay(_gameplay, _start);
 
-    cleanup(_start);
+    cleanup(_gameplay);
     return 0;
 }

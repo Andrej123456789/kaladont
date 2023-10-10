@@ -44,3 +44,6 @@
 | 2       | Entering `src` directory | `cd kaladont/src`                                       |
 | 3       | Compiling                | `make`                                                  |
 | 4       | Running the program      | `make run`                                              |
+
+## Credits
+- [Rječnik hrvatskih jezika](https://github.com/gigaly/rjecnik-hrvatskih-jezika)
