@@ -45,5 +45,13 @@
 | 3       | Compiling                | `make`                                                  |
 | 4       | Running the program      | `make run`                                              |
 
+## How to change settings?
+
+- `kaladont_allowed` - is it allowed to say word `kaladont`
+- `players` - number of players
+- `words_path` - list of .txt files containing words
+
 ## Credits
+
 - [Rječnik hrvatskih jezika](https://github.com/gigaly/rjecnik-hrvatskih-jezika)
+- [spisak-srpskih-reci](https://github.com/turanjanin/spisak-srpskih-reci)

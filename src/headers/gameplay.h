@@ -2,7 +2,6 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <limits.h>
 #include <time.h>
 
 #include "c_string.h"
@@ -19,7 +18,7 @@ typedef struct Start
     bool kaladont_allowed;
     uint64_t players;
 
-    char words_path[NAME_MAX];
+    cvector_vector_type(char*) words_path;
 } Start;
 
 /**

@@ -24,9 +24,10 @@ void cleanup(Gameplay* _gameplay)
  * Load settings and words list
  * @param _gameplay `Gameplay` struct, destination for words list
  * @param _start `Start` struct, destination
- * @param path path to `.json` file 
+ * @param path path to `.json` file
+ * @return int
 */
-void start(Gameplay* _gameplay, Start* _start, char* path)
+int start(Gameplay* _gameplay, Start* _start, char* path)
 {
     /* Load JSON */
     struct json_object_iterator it;
@@ -63,7 +64,11 @@ void start(Gameplay* _gameplay, Start* _start, char* path)
 
         else if (strcmp(key, "words_path") == 0)
         {
-            strcpy(_start->words_path, json_object_get_string(val));
+            for (int i = 0; i < json_object_array_length(val); i++) 
+            {
+                struct json_object *element = json_object_array_get_idx(val, i);
+                cvector_push_back(_start->words_path, strdup(json_object_get_string(element)));
+            }
         }
 
         json_object_iter_next(&it);
@@ -75,23 +80,29 @@ void start(Gameplay* _gameplay, Start* _start, char* path)
     FILE* file;
     char buffer[255];
 
-    file = fopen(_start->words_path, "r");
-    if (file == NULL)
+    for (size_t i = 0; i < cvector_size(_start->words_path); i++)
     {
-        printf("Failed to load file %s!\n", _start->words_path);
-        return;
+        file = fopen(_start->words_path[i], "r");
+
+        if (file == NULL)
+        {
+            printf("Failed to load file %s!\n", _start->words_path[i]);
+            return 1;
+        }
+
+        uint64_t j = 0;
+        while (fgets(buffer, sizeof(buffer), file))
+        {
+            buffer[strcspn(buffer, "\n")] = '\0'; /* remove \n */
+            cvector_push_back(_gameplay->words, strdup(buffer));
+
+            j += 1;
+        }
+
+        fclose(file);
     }
 
-    uint64_t i = 0;
-    while (fgets(buffer, sizeof(buffer), file))
-    {
-        buffer[strcspn(buffer, "\n")] = '\0'; /* remove \n */
-        cvector_push_back(_gameplay->words, strdup(buffer));
-
-        i += 1;
-    }
-
-    fclose(file);
+    return 0;
 }
 
 /**
@@ -104,9 +115,14 @@ int main()
 
     _gameplay->current_word = malloc(sizeof(char) * 1024);
 
-    start(_gameplay, _start, "settings/settings.json");
+    if (start(_gameplay, _start, "settings/settings.json") != 0)
+    {
+        goto end;
+    }
+
     gameplay(_gameplay, _start);
 
+end:
     cleanup(_gameplay);
     return 0;
 }
