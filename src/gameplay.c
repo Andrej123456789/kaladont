@@ -98,7 +98,6 @@ void gameplay(Gameplay* _gameplay, Start* _start)
     set_random_word(_gameplay);
     while (!game_finished)
     {
-        strcpy(_gameplay->current_word, "car");
         printf("Previous word is: %s\n", _gameplay->current_word);
 
         printf("Player %lu: ", _gameplay->player);
