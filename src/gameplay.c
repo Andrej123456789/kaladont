@@ -80,8 +80,6 @@ void set_random_word(Gameplay* _gameplay)
 
     cvector_push_back(_gameplay->timeline, rand_word);
     strcpy(_gameplay->current_word, rand_word);
-
-    printf("Current word is: %s\n", rand_word);
 }
 
 void gameplay(Gameplay* _gameplay, Start* _start)
@@ -89,10 +87,19 @@ void gameplay(Gameplay* _gameplay, Start* _start)
     bool game_finished = false;
     _gameplay->player = 0;
 
+    Player players[_start->players];
     char user_input[1024];
+
+    for (size_t i = 0; i < _start->players; i++)
+    {
+        players[i].points = 0;
+    }
+
+    set_random_word(_gameplay);
     while (!game_finished)
     {
-        set_random_word(_gameplay);
+        strcpy(_gameplay->current_word, "car");
+        printf("Previous word is: %s\n", _gameplay->current_word);
 
         printf("Player %lu: ", _gameplay->player);
         scanf("%1023s", user_input);
@@ -103,9 +110,27 @@ void gameplay(Gameplay* _gameplay, Start* _start)
             return;
         }
 
-        if (strcmp(get_first_N_characters(user_input, 2), get_last_N_characters(_gameplay->current_word, 2)) == 0 && find_element(_gameplay->words, user_input))
+        if (strcmp(get_first_N_characters(user_input, 2), get_last_N_characters(_gameplay->current_word, 2)) == 0 
+                                                                && find_element(_gameplay->words, user_input)
+                                                                && strlen(user_input) > 2)
         {
             printf("You have one point!\n");
+            players[_gameplay->player].points += 1;
+
+            if (strcmp(get_last_N_characters(user_input, 2), "nt") == 0)
+            {
+                printf("Game ended... \n");
+
+                printf("Number of points of each player: \n");
+                for (size_t i = 0; i < _start->players; i++)
+                {
+                    printf("Player %lu has %lu points. \n", i, players[i].points);
+                }
+
+                break;
+            }
+
+            strcpy(_gameplay->current_word, user_input);
         }
 
         else

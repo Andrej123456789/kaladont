@@ -36,6 +36,15 @@ typedef struct Gameplay
     cvector_vector_type(char*) words;
 } Gameplay;
 
+/**
+ * Struct containing player's informationas
+ * @param points number of points
+*/
+typedef struct Player
+{
+    uint64_t points;
+} Player;
+
 /* ------------------------------------ */
 
 /**

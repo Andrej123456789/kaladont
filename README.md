@@ -15,8 +15,8 @@
 ## TODO
 
 - [x] Settings
-- [ ] Gameplay
-  - [ ] Local
+- [x] Gameplay
+  - [x] Local
   - [ ] Networking
 - [ ] Computer
 
