@@ -98,45 +98,53 @@ void gameplay(Gameplay* _gameplay, Start* _start)
     set_random_word(_gameplay);
     while (!game_finished)
     {
-        printf("Previous word is: %s\n", _gameplay->current_word);
-
-        printf("Player %lu: ", _gameplay->player);
-        scanf("%1023s", user_input);
-
-        if (strcmp(user_input, "exit") == 0)
+        while (true)
         {
-            printf("Exiting...\n");
-            return;
-        }
+            printf("Previous word is: %s\n", _gameplay->current_word);
 
-        if (strcmp(get_first_N_characters(user_input, 2), get_last_N_characters(_gameplay->current_word, 2)) == 0 
-                                                                && find_element(_gameplay->words, user_input)
-                                                                && strlen(user_input) > 2)
-        {
-            printf("You have one point!\n");
-            players[_gameplay->player].points += 1;
+            printf("Player %lu: ", _gameplay->player);
+            scanf("%1023s", user_input);
 
-            if (strcmp(get_last_N_characters(user_input, 2), "nt") == 0)
+            if (strcmp(user_input, "exit") == 0)
             {
-                printf("Game ended... \n");
+                printf("Exiting...\n");
 
-                printf("Number of points of each player: \n");
-                for (size_t i = 0; i < _start->players; i++)
-                {
-                    printf("Player %lu has %lu points. \n", i, players[i].points);
-                }
-
+                game_finished = true;
                 break;
             }
 
-            strcpy(_gameplay->current_word, user_input);
-        }
+            else if (strcmp(user_input, "next") == 0)
+            {
+                printf("You don't have a point!\n");
+                break;
+            }
 
-        else
-        {
-            printf("You don't have one point!\n");
+            if (strcmp(get_first_N_characters(user_input, 2), get_last_N_characters(_gameplay->current_word, 2)) == 0 
+                                                                && find_element(_gameplay->words, user_input)
+                                                                && strlen(user_input) > 2)
+            {
+                printf("You have one point!\n");
+                players[_gameplay->player].points += 1;
+
+                if (strcmp(get_last_N_characters(user_input, 2), "nt") == 0)
+                {
+                    printf("Game ended... \n");
+
+                    printf("Number of points of each player: \n");
+                    for (size_t i = 0; i < _start->players; i++)
+                    {
+                        printf("Player %lu has %lu points. \n", i, players[i].points);
+                    }
+
+                    game_finished = true;
+                    break;
+                }
+
+                strcpy(_gameplay->current_word, user_input);
+                break;
+            }
         }
 
         next_player(_gameplay, _start);
-    } 
+    }
 }
