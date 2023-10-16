@@ -82,7 +82,7 @@ void set_random_word(Gameplay* _gameplay)
     strcpy(_gameplay->current_word, rand_word);
 }
 
-void gameplay(Gameplay* _gameplay, Start* _start)
+void local_gameplay(Gameplay* _gameplay, Start* _start)
 {
     bool game_finished = false;
     _gameplay->player = 0;

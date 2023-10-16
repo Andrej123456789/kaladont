@@ -95,8 +95,8 @@ char* random_word(Gameplay* _gameplay);
 void set_random_word(Gameplay* _gameplay);
 
 /**
- * Entry point to gameplay mechanics
+ * Entry point for local gameplay
  * @param _gameplay `Gameplay` struct
  * @param _start `Start` struct
 */
-void gameplay(Gameplay* _gameplay, Start* _start);
+void local_gameplay(Gameplay* _gameplay, Start* _start);

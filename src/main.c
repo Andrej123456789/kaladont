@@ -120,7 +120,7 @@ int main()
         goto end;
     }
 
-    gameplay(_gameplay, _start);
+    local_gameplay(_gameplay, _start);
 
 end:
     cleanup(_gameplay);
