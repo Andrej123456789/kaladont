@@ -6,10 +6,33 @@
 
 int main()
 {
-    printf ("Connecting to hello world server…\n");
+    /* Define variables */
+
+    char address[1024];
+
+    char ip[1024];
+    char port[1024];
+
+    /* Get server IP and port */
+
+    printf("Enter server IP: ");
+    scanf("%1023s", ip);
+
+    printf("Enter server port: ");
+    scanf("%1023s", port);
+
+    /* Connect to server */
+
+    strcat(address, "tcp://");
+    strcat(address, ip);
+    strcat(address, ":");
+    strcat(address, port);
+    strcat(address, "\0");
+
+    printf("Connecting to hello world server…\n");
     void *context = zmq_ctx_new ();
     void *requester = zmq_socket (context, ZMQ_REQ);
-    zmq_connect (requester, "tcp://localhost:5555");
+    zmq_connect(requester, address);
 
     int request_nbr;
     for (request_nbr = 0; request_nbr != 10; request_nbr++) {
