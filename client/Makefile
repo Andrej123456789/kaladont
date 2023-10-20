@@ -5,7 +5,7 @@ OBJDIR = objects
 OBJS = $(addprefix $(OBJDIR)/, $(patsubst %.c, %.o, $(wildcard *.c)))
 
 BINFOLDER = executable
-BIN = $(BINFOLDER)/kaladont
+BIN = $(BINFOLDER)/kaladont_client
 
 all : $(OBJDIR) $(BINFOLDER) $(BIN)
 

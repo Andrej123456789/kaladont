@@ -1,5 +1,9 @@
 {
     "kaladont-allowed": true,
     "players": 20,
-    "words_path": ["settings/words.txt"]
+    "words_path": ["settings/words.txt"],
+    "network": [{
+        "enabled": true,
+        "port": 5555
+    }]
 }

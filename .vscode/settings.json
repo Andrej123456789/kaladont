@@ -8,6 +8,8 @@
         "unistd.h": "c",
         "c_vector.h": "c",
         "c_string.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "assert.h": "c",
+        "stdbool.h": "c"
     }
 }

@@ -1,8 +1,12 @@
 #pragma once
 
+#include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <time.h>
+#include <unistd.h>
+
+#include <zmq.h>
 
 #include "c_string.h"
 #include "c_vector.h"
@@ -44,6 +48,17 @@ typedef struct Player
 {
     uint64_t points;
 } Player;
+
+/**
+ * Struct containing network informations
+ * @param enabled is multiplayer enabled
+ * @param port port number
+*/
+typedef struct Network
+{
+    bool enabled;
+    uint16_t port;
+} Network;
 
 /* ------------------------------------ */
 
@@ -93,6 +108,14 @@ char* random_word(Gameplay* _gameplay);
  * @param _gameplay `Gameplay` struct
 */
 void set_random_word(Gameplay* _gameplay);
+
+/**
+ * Entry point for multiplayer gameplay
+ * @param _gameplay `Gameplay` struct
+ * @param _network `Network` struct
+ * @param _start `Start` struct
+*/
+void network_gameplay(Gameplay* _gameplay, Network* _network, Start* _start);
 
 /**
  * Entry point for local gameplay
