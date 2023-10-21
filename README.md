@@ -53,5 +53,6 @@
 
 ## Credits
 
+- [c-chatroom](https://github.com/lovenery/c-chatroom)
 - [Rječnik hrvatskih jezika](https://github.com/gigaly/rjecnik-hrvatskih-jezika)
 - [spisak-srpskih-reci](https://github.com/turanjanin/spisak-srpskih-reci)

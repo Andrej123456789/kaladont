@@ -1,12 +1,11 @@
 #pragma once
 
-#include <assert.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <time.h>
-#include <unistd.h>
 
-#include <zmq.h>
+#include "server.h"
 
 #include "c_string.h"
 #include "c_vector.h"
