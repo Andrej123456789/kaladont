@@ -84,7 +84,7 @@ void set_random_word(Gameplay* _gameplay)
 
 void network_gameplay(Gameplay* _gameplay, Network* _network, Start* _start)
 {
-    run_server();
+    server_main(_network->port);
 }
 
 void local_gameplay(Gameplay* _gameplay, Start* _start)

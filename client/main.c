@@ -3,9 +3,11 @@
 #include <string.h>
 
 #include <arpa/inet.h>
+#include <errno.h>
 #include <netinet/in.h>
 #include <pthread.h>
 #include <signal.h>
+#include <stdbool.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -13,6 +15,18 @@
 #define LENGTH_NAME 31
 #define LENGTH_MSG 101
 #define LENGTH_SEND 201
+
+void clear_input_buffer() 
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void str_overwrite_stdout() 
+{
+    printf("\r%s", "> ");
+    fflush(stdout);
+}
 
 void str_trim_lf(char* arr, int length) {
     int i;
@@ -24,9 +38,15 @@ void str_trim_lf(char* arr, int length) {
     }
 }
 
-void str_overwrite_stdout() {
-    printf("\r%s", "> ");
-    fflush(stdout);
+bool str_to_uint16(const char *str, uint16_t *res) {
+    char *end;
+    errno = 0;
+    long val = strtol(str, &end, 10);
+    if (errno || end == str || *end != '\0' || val < 0 || val >= 0x10000) {
+        return false;
+    }
+    *res = (uint16_t)val;
+    return true;
 }
 
 /* ------------------------------------ */
@@ -102,12 +122,31 @@ void* send_msg_handler()
 
 int main()
 {
+    char ip[1024];
+    char temp_port[1024];
+
+    uint16_t port = 0;
+
     signal(SIGINT, catch_ctrl_c_and_exit);
 
     printf("kaladont client vβ\n");
     printf("credits: https://github.com/lovenery/c-chatroom \n\n");
 
     /* User specified informations */
+    printf("Enter server IP: ");
+    scanf("%1023s", ip);
+
+    printf("Enter server port: ");
+    scanf("%1023s", temp_port);
+
+    bool conv_result = str_to_uint16(temp_port, &port);
+    if (conv_result == false)
+    {
+        printf("Error converting port from string to uint16_t!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    clear_input_buffer();
     printf("Please enter your name: ");
 
     if (fgets(nickname, LENGTH_NAME, stdin) != NULL) 
@@ -136,8 +175,8 @@ int main()
     memset(&server_info, 0, s_addrlen);
     memset(&client_info, 0, c_addrlen);
     server_info.sin_family = PF_INET;
-    server_info.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server_info.sin_port = htons(8888);
+    server_info.sin_addr.s_addr = inet_addr(ip);
+    server_info.sin_port = htons(port);
 
     /* Connect to server */
     int err = connect(sockfd, (struct sockaddr *)&server_info, s_addrlen);

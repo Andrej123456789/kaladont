@@ -33,4 +33,9 @@ static ClientList *newNode(int sockfd, char* ip) {
     return np;
 }
 
-int run_server();
+/**
+ * Starts a server
+ * @param port server port
+ * @return int
+*/
+int server_main(uint16_t port);

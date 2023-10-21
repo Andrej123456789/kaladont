@@ -10,6 +10,8 @@
         "c_string.h": "c",
         "stdint.h": "c",
         "assert.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "chrono": "c",
+        "functional": "c"
     }
 }

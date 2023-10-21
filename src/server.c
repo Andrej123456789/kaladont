@@ -119,7 +119,7 @@ void client_handler(void *p_client)
     free(np);
 }
 
-int run_server()
+int server_main(uint16_t port)
 {
     signal(SIGINT, catch_ctrl_c_and_exit);
 
@@ -139,7 +139,7 @@ int run_server()
     memset(&client_info, 0, c_addrlen);
     server_info.sin_family = PF_INET;
     server_info.sin_addr.s_addr = INADDR_ANY;
-    server_info.sin_port = htons(8888);
+    server_info.sin_port = htons(port);
 
     /* Bind and listen */
     bind(server_sockfd, (struct sockaddr *)&server_info, s_addrlen);
