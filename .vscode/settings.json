@@ -12,6 +12,7 @@
         "assert.h": "c",
         "stdbool.h": "c",
         "chrono": "c",
-        "functional": "c"
+        "functional": "c",
+        "format": "c"
     }
 }

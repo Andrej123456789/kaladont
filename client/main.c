@@ -160,6 +160,8 @@ int main()
         exit(EXIT_FAILURE);
     }
 
+    printf("\n");
+
     /* Create socket */
     sockfd = socket(AF_INET , SOCK_STREAM , 0);
     if (sockfd == -1) 
@@ -191,6 +193,8 @@ int main()
     getpeername(sockfd, (struct sockaddr*) &server_info, (socklen_t*) &s_addrlen);
     printf("Connect to Server: %s:%d\n", inet_ntoa(server_info.sin_addr), ntohs(server_info.sin_port));
     printf("You are: %s:%d\n", inet_ntoa(client_info.sin_addr), ntohs(client_info.sin_port));
+
+    printf("\n");
 
     send(sockfd, nickname, LENGTH_NAME, 0);
 
