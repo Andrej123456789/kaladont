@@ -29,12 +29,11 @@ void set_random_word(Gameplay* _gameplay)
     strcpy(_gameplay->current_word, rand_word);
 }
 
-void network_gameplay(Gameplay* _gameplay, Network* _network, Start* _start)
+void network_gameplay(Gameplay* _gameplay, Network* _network)
 {
     int server_sockfd = 0;
     int client_sockfd = 0;
 
-    ClientList* root;
     ClientList* now;
 
     signal(SIGINT, catch_ctrl_c_and_exit);
@@ -89,13 +88,12 @@ void network_gameplay(Gameplay* _gameplay, Network* _network, Start* _start)
 
         ClientArg arguments;
 
-        arguments.root = root;
         arguments.now = now;
         arguments.p_client = c;
         arguments._gameplay = _gameplay;
 
         pthread_t id;
-        if (pthread_create(&id, NULL, (void *)client_handler, (void *)&arguments) != 0) 
+        if (pthread_create(&id, NULL, client_handler, (void *)&arguments) != 0) 
         {
             perror("Create pthread error!\n");
             return;

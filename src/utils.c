@@ -20,7 +20,7 @@ char* get_first_N_characters(const char* input, int N)
     if (N <= 0) 
     {
         result[0] = '\0';
-        return;
+        return NULL;
     }
 
     strncpy(result, input, N);
@@ -36,7 +36,7 @@ char* get_last_N_characters(const char* input, int N)
     if (N <= 0) 
     {
         result[0] = '\0';
-        return;
+        return NULL;
     }
 
     int length = strlen(input);

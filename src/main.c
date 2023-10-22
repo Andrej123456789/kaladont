@@ -65,7 +65,7 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
 
         else if (strcmp(key, "words_path") == 0)
         {
-            for (int i = 0; i < json_object_array_length(val); i++) 
+            for (size_t i = 0; i < json_object_array_length(val); i++) 
             {
                 struct json_object *element = json_object_array_get_idx(val, i);
                 cvector_push_back(_start->words_path, strdup(json_object_get_string(element)));
@@ -76,7 +76,7 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
         {
             struct json_object* network;
 
-            for (int i = 0; i < json_object_array_length(val); i++) 
+            for (size_t i = 0; i < json_object_array_length(val); i++) 
             {
                 struct json_object *element = json_object_array_get_idx(val, i);
                 network = json_tokener_parse(json_object_get_string(element));
@@ -158,7 +158,7 @@ int main()
 
     if (_network->enabled)
     {
-        network_gameplay(_gameplay, _network, _start);
+        network_gameplay(_gameplay, _network);
     }
 
     else

@@ -8,7 +8,6 @@
 #include "server.h"
 #include "utils.h"
 
-#include "c_string.h"
 #include "c_vector.h"
 
 /**
@@ -86,9 +85,8 @@ void set_random_word(Gameplay* _gameplay);
  * Entry point for multiplayer gameplay
  * @param _gameplay `Gameplay` struct
  * @param _network `Network` struct
- * @param _start `Start` struct
 */
-void network_gameplay(Gameplay* _gameplay, Network* _network, Start* _start);
+void network_gameplay(Gameplay* _gameplay, Network* _network);
 
 /**
  * Entry point for local gameplay

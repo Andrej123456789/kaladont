@@ -50,48 +50,37 @@ typedef struct ClientNode
  * @param sockfd socket stuff
  * @param ip client's IP
 */
-static ClientList *newNode(int sockfd, char* ip) 
-{
-    ClientList *np = (ClientList *)malloc( sizeof(ClientList) );
-    np->data = sockfd;
-    np->prev = NULL;
-    np->link = NULL;
-    np->wait_turn = false;
-    strncpy(np->ip, ip, 16);
-    strncpy(np->name, "NULL", 5);
-    return np;
-}
+ClientList* newNode(int sockfd, char* ip);
+
+extern ClientList* root;
 
 /**
  * Struct containing all arguments for `client_handler` function
- * @param root root
  * @param now now
  * @param p_client client
+ * @param _gameplay `Gameplay` struct
 */
 typedef struct ClientArg
 {
-    ClientList* root;
     ClientList* now;
     void *p_client;
     struct gameplay_T* _gameplay;
 } ClientArg ;
 
 /**
- * Catch Ctrl-C and handle itž
- * @param root root
+ * Catch Ctrl-C and handle it
  * @param sig signal number
 */
-void catch_ctrl_c_and_exit(ClientList* root, int sig);
+void catch_ctrl_c_and_exit(int sig);
 
 /**
  * Send number to all clients
- * @param root root
  * @param tmp_buffer message to send to all clients
 */
-void send_to_all_clients(ClientList* root, char tmp_buffer[]);
+void send_to_all_clients(char tmp_buffer[]);
 
 /**
  * Handle clients
  * @param client_arg arguments in struct because we pass this function to `pthread_create`
 */
-void client_handler(void* client_arg);
+void* client_handler(void* client_arg);
