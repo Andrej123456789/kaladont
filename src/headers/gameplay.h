@@ -6,6 +6,7 @@
 #include <time.h>
 
 #include "server.h"
+#include "utils.h"
 
 #include "c_string.h"
 #include "c_vector.h"
@@ -31,7 +32,7 @@ typedef struct Start
  * @param timeline used words in current game
  * @param words list of all available words
 */
-typedef struct Gameplay
+typedef struct gameplay_T
 {
     char* current_word;
     uint64_t player;
@@ -58,33 +59,6 @@ typedef struct Network
     bool enabled;
     uint16_t port;
 } Network;
-
-/* ------------------------------------ */
-
-/**
- * # IMPROVE THIS FUNCTION
- * @brief Finds element in c_vector
- * @param vec vector
- * @param str string (element)
- * @return bool
-*/
-bool find_element(cvector_vector_type(char*) vec, char* str);
-
-/**
- * Get last N characters
- * @param input string
- * @param N number of characters we are comparing
- * @return char*
-*/
-char* get_last_N_characters(const char* input, int N);
-
-/**
- * Get first N characters
- * @param input string
- * @param N number of characters we are comparing
- * @return char*
-*/
-char* get_first_N_characters(const char* input, int N);
 
 /* ------------------------------------ */
 

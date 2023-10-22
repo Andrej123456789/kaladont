@@ -17,7 +17,7 @@
 - [x] Settings
 - [x] Gameplay
   - [x] Local
-  - [ ] Networking
+  - [x] Networking
 - [ ] Computer
 
 ## Compile

@@ -13,9 +13,13 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "utils.h"
+
 #define LENGTH_NAME 31
 #define LENGTH_MSG 101
 #define LENGTH_SEND 201
+
+struct gameplay_T;
 
 /**
  * Struct containing client's information
@@ -24,15 +28,20 @@
  * @param link some link
  * @param ip client's ip
  * @param name client's name
+ * @param points client's number of points
  * @param wait_turn did player play his turn
 */
 typedef struct ClientNode 
 {
     int data;
+
     struct ClientNode* prev;
     struct ClientNode* link;
+
     char ip[16];
     char name[31];
+
+    uint64_t points;
     bool wait_turn;
 } ClientList;
 
@@ -64,6 +73,7 @@ typedef struct ClientArg
     ClientList* root;
     ClientList* now;
     void *p_client;
+    struct gameplay_T* _gameplay;
 } ClientArg ;
 
 /**
@@ -76,11 +86,9 @@ void catch_ctrl_c_and_exit(ClientList* root, int sig);
 /**
  * Send number to all clients
  * @param root root
- * @param np np
- * @param np list of all clients
  * @param tmp_buffer message to send to all clients
 */
-void send_to_all_clients(ClientList* root, ClientList *np, char tmp_buffer[]);
+void send_to_all_clients(ClientList* root, char tmp_buffer[]);
 
 /**
  * Handle clients

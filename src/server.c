@@ -1,4 +1,5 @@
 #include "headers/server.h"
+#include "headers/gameplay.h"
 
 void catch_ctrl_c_and_exit(ClientList* root, int sig) 
 {
@@ -21,18 +22,14 @@ void catch_ctrl_c_and_exit(ClientList* root, int sig)
     exit(EXIT_SUCCESS);
 }
 
-void send_to_all_clients(ClientList* root, ClientList *np, char tmp_buffer[]) 
+void send_to_all_clients(ClientList* root, char tmp_buffer[]) 
 {
     ClientList *tmp = root->link;
 
     while (tmp != NULL) 
     {
-        /* All clients except itself! */
-        if (np->data != tmp->data) 
-        {
-            printf("Send to sockfd %d: \"%s\" \n", tmp->data, tmp_buffer);
-            send(tmp->data, tmp_buffer, LENGTH_SEND, 0);
-        }
+        printf("Send to sockfd %d: %s \n", tmp->data, trim_whitespace(tmp_buffer));
+        send(tmp->data, tmp_buffer, LENGTH_SEND, 0);
 
         tmp = tmp->link;
     }
@@ -41,6 +38,7 @@ void send_to_all_clients(ClientList* root, ClientList *np, char tmp_buffer[])
 void client_handler(void* client_arg)
 {
     ClientArg *args = (ClientArg *)client_arg;
+    struct gameplay_T* _gameplay = args->_gameplay;
 
     int leave_flag = 0;
     char nickname[LENGTH_NAME] = {};
@@ -58,9 +56,9 @@ void client_handler(void* client_arg)
     else 
     {
         strncpy(np->name, nickname, LENGTH_NAME);
-        printf("%s (%s)(%d) joined the game!\n", np->name, np->ip, np->data);
-        sprintf(send_buffer, "%s (%s) joined the game!.", np->name, np->ip);
-        send_to_all_clients(args->root, np, send_buffer);
+        printf("%s (%s)(%d) joined the game!\n\n", np->name, np->ip, np->data);
+        sprintf(send_buffer, "%s (%s) joined the game!\n", np->name, np->ip);
+        send_to_all_clients(args->root, send_buffer);
     }
 
     /* Conversation */
@@ -80,8 +78,42 @@ void client_handler(void* client_arg)
             }
 
             sprintf(send_buffer, "%s:%s from %s", np->name, recv_buffer, np->ip);
+            send_to_all_clients(args->root, send_buffer);
 
-            
+            if (strcmp(recv_buffer, "next") == 0)
+            {
+                sprintf(send_buffer, "%s don't have a point!\n", np->name);
+                send_to_all_clients(args->root, send_buffer);
+            }
+
+            if (strcmp(get_first_N_characters(recv_buffer, 2), get_last_N_characters(_gameplay->current_word, 2)) == 0 
+                                                                && find_element(_gameplay->words, recv_buffer)
+                                                                && strlen(recv_buffer) > 2)
+            {
+
+                sprintf(send_buffer, "%s have one point!\n", np->name);
+                send_to_all_clients(args->root, send_buffer);
+
+                np->points += 1;
+
+                if (strcmp(get_last_N_characters(recv_buffer, 2), "nt") == 0)
+                {
+                    send_to_all_clients(args->root, "Game ended... \n");
+
+                    break;
+                }
+
+                strcpy(_gameplay->current_word, recv_buffer);
+
+                sprintf(send_buffer, "Previous word is: %s!\n", _gameplay->current_word);
+                send_to_all_clients(args->root, send_buffer);
+            }
+
+            else
+            {
+                sprintf(send_buffer, "%s don't have a point!\n", np->name);
+                send_to_all_clients(args->root, send_buffer);
+            }
         } 
         
         else if (receive == 0 || strcmp(recv_buffer, "exit") == 0) 
@@ -96,8 +128,6 @@ void client_handler(void* client_arg)
             printf("Fatal Error: -1\n");
             leave_flag = 1;
         }
-
-        send_to_all_clients(args->root, np, send_buffer);
     }
 
     /* Remove node */

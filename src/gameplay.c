@@ -1,58 +1,5 @@
 #include "headers/gameplay.h"
 
-bool find_element(cvector_vector_type(char*) vec, char* str)
-{
-    for (size_t i = 0; i < cvector_size(vec); i++)
-    {
-        if (strcmp(str, vec[i]) == 0)
-        {
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-char* get_last_N_characters(const char* input, int N)
-{
-    char result[255];
-
-    if (N <= 0) 
-    {
-        result[0] = '\0';
-        return;
-    }
-
-    int length = strlen(input);
-    if (length < N) 
-    {
-        N = length;
-    }
-
-    strncpy(result, input + (length - N), N);
-    result[N] = '\0';
-
-    return strdup(result);
-}
-
-char* get_first_N_characters(const char* input, int N)
-{
-    char result[255];
-
-    if (N <= 0) 
-    {
-        result[0] = '\0';
-        return;
-    }
-
-    strncpy(result, input, N);
-    result[N] = '\0';
-
-    return strdup(result);
-}
-
-/* ------------------------------------ */
-
 void next_player(Gameplay* _gameplay, Start* _start)
 {
     _gameplay->player += 1;
@@ -132,7 +79,7 @@ void network_gameplay(Gameplay* _gameplay, Network* _network, Start* _start)
 
         /* Print client IP */
         getpeername(client_sockfd, (struct sockaddr*) &client_info, (socklen_t*) &c_addrlen);
-        printf("Client %s:%d come in.\n", inet_ntoa(client_info.sin_addr), ntohs(client_info.sin_port));
+        printf("Client %s:%d joined the game!\n", inet_ntoa(client_info.sin_addr), ntohs(client_info.sin_port));
 
         /* Append linked list for clients */
         ClientList *c = newNode(client_sockfd, inet_ntoa(client_info.sin_addr));
@@ -145,6 +92,7 @@ void network_gameplay(Gameplay* _gameplay, Network* _network, Start* _start)
         arguments.root = root;
         arguments.now = now;
         arguments.p_client = c;
+        arguments._gameplay = _gameplay;
 
         pthread_t id;
         if (pthread_create(&id, NULL, (void *)client_handler, (void *)&arguments) != 0) 
