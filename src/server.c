@@ -115,7 +115,6 @@ void* client_handler(void* client_arg)
                 if (strcmp(get_last_N_characters(recv_buffer, 2), "nt") == 0)
                 {
                     send_to_all_clients("Game ended... \n");
-
                     break;
                 }
 

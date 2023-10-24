@@ -45,8 +45,10 @@ void set_random_word(Gameplay* _gameplay)
 
 /* ------------------------------------ */
 
-int gameplay(Gameplay* _gameplay, char* input)
+int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
 {
+    char send_buffer[LENGTH_SEND];
+
     if (strcmp(input, "exit") == 0)
     {
         printf("Exiting...\n");
@@ -56,6 +58,13 @@ int gameplay(Gameplay* _gameplay, char* input)
     else if (strcmp(input, "next") == 0)
     {
         printf("You don't have a point!\n");
+
+        if (network)
+        {
+            sprintf(send_buffer, "%s don't have a point!\n", np->name);
+            send_to_all_clients(send_buffer);
+        }
+
         return 0;
     }
 
@@ -65,9 +74,21 @@ int gameplay(Gameplay* _gameplay, char* input)
     {
         printf("You have one point!\n");
 
+        if (network)
+        {
+            sprintf(send_buffer, "%s have one point!\n", np->name);
+            send_to_all_clients(send_buffer);
+        }
+
         if (strcmp(get_last_N_characters(input, 2), "nt") == 0)
         {
             printf("Game ended... \n");
+
+            if (network)
+            {
+                send_to_all_clients("Game ended... \n");
+            }
+            
             return -1;
         }
 
@@ -76,6 +97,13 @@ int gameplay(Gameplay* _gameplay, char* input)
     }
 
     printf("You don't have a point!\n");
+
+    if (network)
+    {
+        sprintf(send_buffer, "%s don't have a point!\n", np->name);
+        send_to_all_clients(send_buffer);
+    }
+
     return 0;
 }
 
@@ -176,7 +204,7 @@ void local_gameplay(Gameplay* _gameplay, Start* _start)
             printf("Player %lu: ", _gameplay->player);
             scanf("%1023s", user_input);
 
-            int result = gameplay(_gameplay, user_input);
+            int result = gameplay(_gameplay, NULL, user_input, false);
 
             if (result == -1)
             {

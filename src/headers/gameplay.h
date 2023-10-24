@@ -100,9 +100,11 @@ void set_random_word(Gameplay* _gameplay);
 /**
  * Unified gameplay mechanics
  * @param _gameplay `Gameplay` struct
+ * @param np network players
  * @param input user input
+ * @param network is multiplayer mode enabled
 */
-int gameplay(Gameplay* _gameplay, char* input);
+int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network);
 
 /**
  * Entry point for multiplayer gameplay

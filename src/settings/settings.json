@@ -3,7 +3,7 @@
     "players": 20,
     "words_path": ["settings/words.txt"],
     "network": [{
-        "enabled": false,
+        "enabled": true,
         "port": 5555
     }]
 }
