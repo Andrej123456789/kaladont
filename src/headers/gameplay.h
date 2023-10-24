@@ -76,10 +76,33 @@ void next_player(Gameplay* _gameplay, Start* _start);
 char* random_word(Gameplay* _gameplay);
 
 /**
+ * Read points from local players
+ * @param players players list
+ * @param num_players number of players in game
+*/
+void read_points(Player players[], uint64_t num_players);
+
+/**
+ * Set points to local player
+ * @param _gameplay `Gameplay` struct
+ * @param players players list
+*/
+void set_point(Gameplay* _gameplay, Player players[]);
+
+/**
  * Get random word from `random_word`, push back it to `timeline` and copy it to `current_word`
  * @param _gameplay `Gameplay` struct
 */
 void set_random_word(Gameplay* _gameplay);
+
+/* ------------------------------------ */
+
+/**
+ * Unified gameplay mechanics
+ * @param _gameplay `Gameplay` struct
+ * @param input user input
+*/
+int gameplay(Gameplay* _gameplay, char* input);
 
 /**
  * Entry point for multiplayer gameplay
