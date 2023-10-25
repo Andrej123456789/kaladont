@@ -66,7 +66,12 @@ char* trim_whitespace(char* str)
     while(end > str && isspace((unsigned char)*end)) end--;
 
     // Write new null terminator character
-    end[1] = '\0';
 
+    if (strlen(end) < 1)
+    {
+        return str;
+    }
+
+    end[1] = '\0';
     return str;
 }

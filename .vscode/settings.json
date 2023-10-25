@@ -13,6 +13,7 @@
         "stdbool.h": "c",
         "chrono": "c",
         "functional": "c",
-        "format": "c"
+        "format": "c",
+        "time.h": "c"
     }
 }

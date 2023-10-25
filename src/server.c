@@ -77,6 +77,9 @@ void* client_handler(void* client_arg)
         send_to_all_clients(send_buffer);
     }
 
+    sprintf(send_buffer, "Previous word is: %s\n", _gameplay->current_word);
+    send_to_all_clients(send_buffer);
+
     /* Conversation */
     while (1) 
     {
@@ -96,38 +99,24 @@ void* client_handler(void* client_arg)
             sprintf(send_buffer, "%s:%s from %s", np->name, recv_buffer, np->ip);
             send_to_all_clients(send_buffer);
 
-            if (strcmp(recv_buffer, "next") == 0)
+            int result = gameplay(_gameplay, np, recv_buffer, true);
+
+            if (result == -1)
             {
-                sprintf(send_buffer, "%s don't have a point!\n", np->name);
-                send_to_all_clients(send_buffer);
+                np->points += 1;
+                printf("read points\n");
+
+                leave_flag = 1;
             }
 
-            if (strcmp(get_first_N_characters(recv_buffer, 2), get_last_N_characters(_gameplay->current_word, 2)) == 0 
-                                                                && find_element(_gameplay->words, recv_buffer)
-                                                                && strlen(recv_buffer) > 2)
+            else if (result == 1)
             {
-
-                sprintf(send_buffer, "%s have one point!\n", np->name);
-                send_to_all_clients(send_buffer);
-
                 np->points += 1;
-
-                if (strcmp(get_last_N_characters(recv_buffer, 2), "nt") == 0)
-                {
-                    send_to_all_clients("Game ended... \n");
-                    break;
-                }
-
-                strcpy(_gameplay->current_word, recv_buffer);
-
-                sprintf(send_buffer, "Previous word is: %s!\n", _gameplay->current_word);
-                send_to_all_clients(send_buffer);
             }
 
             else
             {
-                sprintf(send_buffer, "%s don't have a point!\n", np->name);
-                send_to_all_clients(send_buffer);
+                
             }
         } 
         
@@ -143,6 +132,9 @@ void* client_handler(void* client_arg)
             printf("Fatal Error: -1\n");
             leave_flag = 1;
         }
+
+        sprintf(send_buffer, "Previous word is: %s\n", _gameplay->current_word);
+        send_to_all_clients(send_buffer);
     }
 
     /* Remove node */
