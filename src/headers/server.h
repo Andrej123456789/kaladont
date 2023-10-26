@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include <arpa/inet.h>
+#include <inttypes.h>
 #include <netinet/in.h>
 #include <pthread.h>
 #include <stdbool.h>
@@ -13,6 +14,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "c_vector.h"
 #include "utils.h"
 
 #define LENGTH_NAME 31
@@ -28,8 +30,6 @@ struct gameplay_T;
  * @param link some link
  * @param ip client's ip
  * @param name client's name
- * @param points client's number of points
- * @param wait_turn did player play his turn
 */
 typedef struct ClientNode 
 {
@@ -40,10 +40,17 @@ typedef struct ClientNode
 
     char ip[16];
     char name[31];
-
-    uint64_t points;
-    bool wait_turn;
 } ClientList;
+
+/**
+ * Struct containing network player's informations
+ * @param points number of points
+*/
+typedef struct NetworkPlayer
+{
+    char name[LENGTH_NAME];
+    uint64_t points;
+} NetworkPlayer;
 
 /**
  * Create new node on clients list
@@ -65,6 +72,7 @@ typedef struct ClientArg
     ClientList* now;
     void *p_client;
     struct gameplay_T* _gameplay;
+    cvector_vector_type(NetworkPlayer*) players;
 } ClientArg ;
 
 /**

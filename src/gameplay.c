@@ -86,7 +86,8 @@ int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
 
             if (network)
             {
-                send_to_all_clients("Game ended... \n");
+                sprintf(send_buffer, "Game ended...\n");
+                send_to_all_clients(send_buffer);
             }
             
             return -1;
@@ -113,6 +114,8 @@ void network_gameplay(Gameplay* _gameplay, Network* _network)
     int client_sockfd = 0;
 
     ClientList* now;
+
+    cvector_vector_type(NetworkPlayer*) players = NULL;
 
     signal(SIGINT, catch_ctrl_c_and_exit);
 
@@ -169,6 +172,7 @@ void network_gameplay(Gameplay* _gameplay, Network* _network)
         arguments.now = now;
         arguments.p_client = c;
         arguments._gameplay = _gameplay;
+        arguments.players = players;
 
         pthread_t id;
         if (pthread_create(&id, NULL, client_handler, (void *)&arguments) != 0) 

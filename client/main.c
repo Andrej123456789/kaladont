@@ -58,6 +58,9 @@ char nickname[LENGTH_NAME];
 void catch_ctrl_c_and_exit(int sig) 
 {
     flag = sig;
+
+    printf("Bye\n");
+    exit(sig);
 }
 
 void* recv_msg_handler() 

@@ -53,25 +53,40 @@ char* get_last_N_characters(const char* input, int N)
 
 char* trim_whitespace(char* str)
 {
-    char *end;
+    size_t len = 0;
+    char *frontp = str;
+    char *endp = NULL;
 
-    // Trim leading space
-    while(isspace((unsigned char)*str)) str++;
+    if( str == NULL ) { return NULL; }
+    if( str[0] == '\0' ) { return str; }
 
-    if(*str == 0)  // All spaces?
-    return str;
+    len = strlen(str);
+    endp = str + len;
 
-    // Trim trailing space
-    end = str + strlen(str) - 1;
-    while(end > str && isspace((unsigned char)*end)) end--;
-
-    // Write new null terminator character
-
-    if (strlen(end) < 1)
+    /* Move the front and back pointers to address the first non-whitespace
+     * characters from each end.
+     */
+    while( isspace((unsigned char) *frontp) ) { ++frontp; }
+    if( endp != frontp )
     {
-        return str;
+        while( isspace((unsigned char) *(--endp)) && endp != frontp ) {}
     }
 
-    end[1] = '\0';
+    if( frontp != str && endp == frontp )
+            *str = '\0';
+    else if( str + len - 1 != endp )
+            *(endp + 1) = '\0';
+
+    /* Shift the string so that it starts at str so that if it's dynamically
+     * allocated, we can still free it on the returned pointer.  Note the reuse
+     * of endp to mean the front of the string buffer now.
+     */
+    endp = str;
+    if( frontp != str )
+    {
+        while( *frontp ) { *endp++ = *frontp++; }
+        *endp = '\0';
+    }
+
     return str;
 }

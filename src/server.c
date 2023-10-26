@@ -9,7 +9,6 @@ ClientList* newNode(int sockfd, char* ip)
     np->data = sockfd;
     np->prev = NULL;
     np->link = NULL;
-    np->wait_turn = false;
     strncpy(np->ip, ip, 16);
     strncpy(np->name, "NULL", 5);
     return np;
@@ -57,13 +56,13 @@ void* client_handler(void* client_arg)
     struct gameplay_T* _gameplay = args->_gameplay;
 
     int leave_flag = 0;
-    char nickname[LENGTH_NAME];
+    char nickname[LENGTH_NAME]; 
     char recv_buffer[LENGTH_MSG];
     char send_buffer[LENGTH_SEND];
     ClientList *np = (ClientList *)args->p_client;
 
     /* Naming */
-    if (recv(np->data, nickname, LENGTH_NAME, 0) <= 0 || strlen(nickname) < 2 || strlen(nickname) >= LENGTH_NAME-1) 
+    if (recv(np->data, nickname, LENGTH_NAME, 0) <= 0 || strlen(nickname) < 2 || strlen(nickname) >= LENGTH_NAME - 1) 
     {
         printf("%s didn't input name.\n", np->ip);
         leave_flag = 1;
@@ -75,6 +74,14 @@ void* client_handler(void* client_arg)
         printf("%s (%s)(%d) joined the game!\n\n", np->name, np->ip, np->data);
         sprintf(send_buffer, "%s (%s) joined the game!\n", np->name, np->ip);
         send_to_all_clients(send_buffer);
+
+        NetworkPlayer* new = malloc(sizeof(NetworkPlayer));
+
+        strcpy(new->name, np->name);
+        new->points = 0;
+
+        cvector_push_back(args->players, new);
+        free(new);
     }
 
     sprintf(send_buffer, "Previous word is: %s\n", _gameplay->current_word);
@@ -103,22 +110,39 @@ void* client_handler(void* client_arg)
 
             if (result == -1)
             {
-                np->points += 1;
-                printf("read points\n");
+                for (size_t i = 0; i < cvector_size(args->players); i++)
+                {
+                    if (strcmp(args->players[i]->name, np->name) == 0)
+                    {
+                        args->players[i]->points += 1;
+                    }
+                }
+
+                for (size_t i = 0; i < cvector_size(args->players); i++)
+                {
+                    sprintf(send_buffer, "Player %s has %"PRIu64" points!\n", args->players[i]->name, args->players[i]->points);
+                    send_to_all_clients(send_buffer);
+                }
 
                 leave_flag = 1;
             }
 
             else if (result == 1)
             {
-                np->points += 1;
+                for (size_t i = 0; i < cvector_size(args->players); i++)
+                {
+                    if (strcmp(args->players[i]->name, np->name) == 0)
+                    {
+                        args->players[i]->points += 1;
+                    }
+                }
             }
 
             else
             {
                 
             }
-        } 
+        }
         
         else if (receive == 0 || strcmp(recv_buffer, "exit") == 0) 
         {
@@ -152,6 +176,11 @@ void* client_handler(void* client_arg)
     {
         np->prev->link = np->link;
         np->link->prev = np->prev;
+    }
+
+    for (size_t i = 0; i < cvector_size(args->players); i++)
+    {
+        free(args->players[i]);
     }
 
     free(np);
