@@ -77,12 +77,15 @@ void* client_handler(void* client_arg)
 
         NetworkPlayer* new = malloc(sizeof(NetworkPlayer));
 
+        new->name = malloc(sizeof(char) * LENGTH_NAME);
         strcpy(new->name, np->name);
+
         new->points = 0;
 
-        cvector_push_back(args->players, new);
-        free(new);
+        cvector_push_back(_gameplay->network_points, new);
     }
+
+    printf("%"PRIu64"\n", cvector_size(_gameplay->network_points));
 
     sprintf(send_buffer, "Previous word is: %s\n", _gameplay->current_word);
     send_to_all_clients(send_buffer);
@@ -110,17 +113,17 @@ void* client_handler(void* client_arg)
 
             if (result == -1)
             {
-                for (size_t i = 0; i < cvector_size(args->players); i++)
+                for (size_t i = 0; i < cvector_size(_gameplay->network_points); i++)
                 {
-                    if (strcmp(args->players[i]->name, np->name) == 0)
+                    if (strcmp(_gameplay->network_points[i]->name, np->name) == 0)
                     {
-                        args->players[i]->points += 1;
+                        _gameplay->network_points[i]->points += 1;
                     }
                 }
 
-                for (size_t i = 0; i < cvector_size(args->players); i++)
+                for (size_t i = 0; i < cvector_size(_gameplay->network_points); i++)
                 {
-                    sprintf(send_buffer, "Player %s has %"PRIu64" points!\n", args->players[i]->name, args->players[i]->points);
+                    sprintf(send_buffer, "Player %s has %"PRIu64" points!\n", _gameplay->network_points[i]->name, _gameplay->network_points[i]->points);
                     send_to_all_clients(send_buffer);
                 }
 
@@ -129,11 +132,11 @@ void* client_handler(void* client_arg)
 
             else if (result == 1)
             {
-                for (size_t i = 0; i < cvector_size(args->players); i++)
+                for (size_t i = 0; i < cvector_size(_gameplay->network_points); i++)
                 {
-                    if (strcmp(args->players[i]->name, np->name) == 0)
+                    if (strcmp(_gameplay->network_points[i]->name, np->name) == 0)
                     {
-                        args->players[i]->points += 1;
+                        _gameplay->network_points[i]->points += 1;
                     }
                 }
             }
@@ -178,9 +181,10 @@ void* client_handler(void* client_arg)
         np->link->prev = np->prev;
     }
 
-    for (size_t i = 0; i < cvector_size(args->players); i++)
+    for (size_t i = 0; i < cvector_size(_gameplay->network_points); i++)
     {
-        free(args->players[i]);
+        free(_gameplay->network_points[i]->name);
+        free(_gameplay->network_points[i]);
     }
 
     free(np);

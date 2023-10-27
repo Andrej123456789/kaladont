@@ -16,6 +16,7 @@ void cleanup(Gameplay* _gameplay)
 {
     free(_gameplay->current_word);
 
+    cvector_free(_gameplay->network_points);
     cvector_free(_gameplay->timeline);
     cvector_free(_gameplay->words);
 }
@@ -150,6 +151,7 @@ int main()
     Network* _network = malloc(sizeof(Network));
 
     _gameplay->current_word = malloc(sizeof(char) * 1024);
+    _gameplay->network_points = NULL;
 
     if (start(_gameplay, _network, _start, "settings/settings.json") != 0)
     {

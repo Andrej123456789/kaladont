@@ -43,16 +43,6 @@ typedef struct ClientNode
 } ClientList;
 
 /**
- * Struct containing network player's informations
- * @param points number of points
-*/
-typedef struct NetworkPlayer
-{
-    char name[LENGTH_NAME];
-    uint64_t points;
-} NetworkPlayer;
-
-/**
  * Create new node on clients list
  * @param sockfd socket stuff
  * @param ip client's IP
@@ -72,8 +62,7 @@ typedef struct ClientArg
     ClientList* now;
     void *p_client;
     struct gameplay_T* _gameplay;
-    cvector_vector_type(NetworkPlayer*) players;
-} ClientArg ;
+} ClientArg;
 
 /**
  * Catch Ctrl-C and handle it

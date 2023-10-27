@@ -115,8 +115,6 @@ void network_gameplay(Gameplay* _gameplay, Network* _network)
 
     ClientList* now;
 
-    cvector_vector_type(NetworkPlayer*) players = NULL;
-
     signal(SIGINT, catch_ctrl_c_and_exit);
 
     /* Create socket */
@@ -172,7 +170,6 @@ void network_gameplay(Gameplay* _gameplay, Network* _network)
         arguments.now = now;
         arguments.p_client = c;
         arguments._gameplay = _gameplay;
-        arguments.players = players;
 
         pthread_t id;
         if (pthread_create(&id, NULL, client_handler, (void *)&arguments) != 0) 

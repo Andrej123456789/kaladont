@@ -10,6 +10,8 @@
 
 #include "c_vector.h"
 
+struct networkPlayer_T;
+
 /**
  * Struct containing settings
  * @param kaladont_allowed is word `kaladont` allowed
@@ -28,6 +30,7 @@ typedef struct Start
  * Struct containing gameplay informations
  * @param current_word current word
  * @param player id of current player
+ * @param network_points vector containing points in multiplayer mode
  * @param timeline used words in current game
  * @param words list of all available words
 */
@@ -35,6 +38,7 @@ typedef struct gameplay_T
 {
     char* current_word;
     uint64_t player;
+    cvector_vector_type(struct networkPlayer_T*) network_points;
     cvector_vector_type(char*) timeline;
     cvector_vector_type(char*) words;
 } Gameplay;
@@ -58,6 +62,17 @@ typedef struct Network
     bool enabled;
     uint16_t port;
 } Network;
+
+/**
+ * Struct containing network player's informations
+ * @param name player's name
+ * @param points number of points
+*/
+typedef struct networkPlayer_T
+{
+    char* name;
+    uint64_t points;
+} NetworkPlayer;
 
 /* ------------------------------------ */
 
