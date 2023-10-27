@@ -85,8 +85,6 @@ void* client_handler(void* client_arg)
         cvector_push_back(_gameplay->network_points, new);
     }
 
-    printf("%"PRIu64"\n", cvector_size(_gameplay->network_points));
-
     sprintf(send_buffer, "Previous word is: %s\n", _gameplay->current_word);
     send_to_all_clients(send_buffer);
 
