@@ -1,9 +1,12 @@
 {
     "kaladont-allowed": true,
-    "players": 20,
+    "players": 4,
     "words_path": ["settings/words.txt"],
+    "bot": [{
+        "sequence": "0010"
+    }],
     "network": [{
-        "enabled": true,
+        "enabled": false,
         "port": 5555
     }]
 }

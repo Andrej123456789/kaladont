@@ -10,12 +10,14 @@
 
 /**
  * Free all allocated stuff
+ * @param _bot `Bot` struct
  * @param _gameplay `Gameplay` struct
 */
-void cleanup(Gameplay* _gameplay)
+void cleanup(Bot* _bot, Gameplay* _gameplay)
 {
     free(_gameplay->current_word);
 
+    cvector_free(_bot->sequence); 
     cvector_free(_gameplay->network_points);
     cvector_free(_gameplay->timeline);
     cvector_free(_gameplay->words);
@@ -23,17 +25,18 @@ void cleanup(Gameplay* _gameplay)
 
 /**
  * Load settings and words list
+ * @param _bot `Bot` struct, destionation for bot information
  * @param _gameplay `Gameplay` struct, destination for words list
  * @param _network `Network` struct, destination for network information
  * @param _start `Start` struct, destination for settings (house rules, number of players & others)
  * @param path path to `.json` file
  * @return int
 */
-int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
+int start(Bot* _bot, Gameplay* _gameplay, Network* _network, Start* _start, char* path)
 {
     /* Load JSON */
-    struct json_object_iterator it, it2;
-    struct json_object_iterator itEnd, itEnd2;
+    struct json_object_iterator it;
+    struct json_object_iterator itEnd;
 
     json_object* root = json_object_from_file(path);
     it = json_object_iter_init_default();
@@ -73,9 +76,52 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
             }
         }
 
+        else if (strcmp(key, "bot") == 0)
+        {
+            struct json_object* bot;
+
+            struct json_object_iterator it2;
+            struct json_object_iterator itEnd2;
+
+            for (size_t i = 0; i < json_object_array_length(val); i++) 
+            {
+                struct json_object *element = json_object_array_get_idx(val, i);
+                bot = json_tokener_parse(json_object_get_string(element));
+            }
+
+            it2 = json_object_iter_init_default();
+            it2 = json_object_iter_begin(bot);
+            itEnd2 = json_object_iter_end(bot);
+
+            while (!json_object_iter_equal(&it2, &itEnd2))
+            {
+                const char* key2 = json_object_iter_peek_name(&it2);
+                json_object* val2 = json_object_iter_peek_value(&it2);
+
+                if (strcmp(key2, "sequence") == 0)
+                {
+                    char* temp_sequence = realloc(temp_sequence, sizeof(char) * json_object_get_string_len(val2) + 1);
+                    strcpy(temp_sequence, json_object_get_string(val2));
+
+                    for (size_t i = 0; i < strlen(temp_sequence); i++)
+                    {
+                        cvector_push_back(_bot->sequence, temp_sequence[i]);
+                    }
+
+                    /* Free the string */
+                    free(temp_sequence);
+                }
+
+                json_object_iter_next(&it2);
+            }
+        }
+
         else if (strcmp(key, "network") == 0)
         {
             struct json_object* network;
+
+            struct json_object_iterator it2;
+            struct json_object_iterator itEnd2;
 
             for (size_t i = 0; i < json_object_array_length(val); i++) 
             {
@@ -146,14 +192,17 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
 */
 int main()
 {
-    Start* _start = malloc(sizeof(Start));
+    Bot* _bot = malloc(sizeof(Bot));
     Gameplay* _gameplay = malloc(sizeof(Gameplay));
     Network* _network = malloc(sizeof(Network));
+    Start* _start = malloc(sizeof(Start));
+
+    _bot->sequence = NULL;
 
     _gameplay->current_word = malloc(sizeof(char) * 1024);
     _gameplay->network_points = NULL;
 
-    if (start(_gameplay, _network, _start, "settings/settings.json") != 0)
+    if (start(_bot, _gameplay, _network, _start, "settings/settings.json") != 0)
     {
         goto end;
     }
@@ -170,6 +219,6 @@ int main()
 
 
 end:
-    cleanup(_gameplay);
+    cleanup(_bot, _gameplay);
     return 0;
 }

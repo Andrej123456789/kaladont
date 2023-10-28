@@ -13,18 +13,12 @@
 struct networkPlayer_T;
 
 /**
- * Struct containing settings
- * @param kaladont_allowed is word `kaladont` allowed
- * @param players number of players
- * @param words_path path to words file
+ * Struct cotaining bot informations
 */
-typedef struct Start
+typedef struct Bot
 {
-    bool kaladont_allowed;
-    uint64_t players;
-
-    cvector_vector_type(char*) words_path;
-} Start;
+    cvector_vector_type(char) sequence;
+} Bot;
 
 /**
  * Struct containing gameplay informations
@@ -44,15 +38,6 @@ typedef struct gameplay_T
 } Gameplay;
 
 /**
- * Struct containing player's informationas
- * @param points number of points
-*/
-typedef struct Player
-{
-    uint64_t points;
-} Player;
-
-/**
  * Struct containing network informations
  * @param enabled is multiplayer enabled
  * @param port port number
@@ -64,6 +49,15 @@ typedef struct Network
 } Network;
 
 /**
+ * Struct containing player's informationas
+ * @param points number of points
+*/
+typedef struct Player
+{
+    uint64_t points;
+} Player;
+
+/**
  * Struct containing network player's informations
  * @param name player's name
  * @param points number of points
@@ -73,6 +67,20 @@ typedef struct networkPlayer_T
     char* name;
     uint64_t points;
 } NetworkPlayer;
+
+/**
+ * Struct containing settings
+ * @param kaladont_allowed is word `kaladont` allowed
+ * @param players number of players
+ * @param words_path path to words file
+*/
+typedef struct Start
+{
+    bool kaladont_allowed;
+    uint64_t players;
+
+    cvector_vector_type(char*) words_path;
+} Start;
 
 /* ------------------------------------ */
 
