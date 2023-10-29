@@ -8,6 +8,7 @@
 #include "server.h"
 #include "utils.h"
 
+#include "computer.h"
 #include "c_vector.h"
 
 struct networkPlayer_T;
@@ -138,7 +139,8 @@ void network_gameplay(Gameplay* _gameplay, Network* _network);
 
 /**
  * Entry point for local gameplay
+ * @param _computer `Computer` struct
  * @param _gameplay `Gameplay` struct
  * @param _start `Start` struct
 */
-void local_gameplay(Gameplay* _gameplay, Start* _start);
+void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start);

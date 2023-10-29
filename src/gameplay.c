@@ -3,7 +3,7 @@
 void next_player(Gameplay* _gameplay, Start* _start)
 {
     _gameplay->player += 1;
-    if (_gameplay->player > _start->players)
+    if (_gameplay->player >= _start->players)
     {
         _gameplay->player = 0;
     }
@@ -182,7 +182,7 @@ void network_gameplay(Gameplay* _gameplay, Network* _network)
     return;
 }
 
-void local_gameplay(Gameplay* _gameplay, Start* _start)
+void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start)
 {
     bool game_finished = false;
     _gameplay->player = 0;
@@ -200,10 +200,18 @@ void local_gameplay(Gameplay* _gameplay, Start* _start)
     {
         while (true)
         {
-            printf("Previous word is: %s\n", _gameplay->current_word);
+            if (_computer->sequence[_gameplay->player] == '1')
+            {
+                strcpy(user_input, computer_turn());
+            }
 
-            printf("Player %lu: ", _gameplay->player);
-            scanf("%1023s", user_input);
+            else
+            {
+                printf("Previous word is: %s\n", _gameplay->current_word);
+
+                printf("Player %lu: ", _gameplay->player);
+                scanf("%1023s", user_input);
+            }
 
             int result = gameplay(_gameplay, NULL, user_input, false);
 

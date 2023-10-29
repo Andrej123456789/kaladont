@@ -76,7 +76,7 @@ int start(Computer* _computer, Gameplay* _gameplay, Network* _network, Start* _s
             }
         }
 
-        else if (strcmp(key, "bot") == 0)
+        else if (strcmp(key, "computer") == 0)
         {
             struct json_object* bot;
 
@@ -214,7 +214,7 @@ int main()
 
     else
     {
-        local_gameplay(_gameplay, _start);
+        local_gameplay(_computer, _gameplay, _start);
     }
 
 
