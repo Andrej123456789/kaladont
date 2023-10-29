@@ -10,14 +10,14 @@
 
 /**
  * Free all allocated stuff
- * @param _bot `Bot` struct
+ * @param _computer `Bot` struct
  * @param _gameplay `Gameplay` struct
 */
-void cleanup(Bot* _bot, Gameplay* _gameplay)
+void cleanup(Computer* _computer, Gameplay* _gameplay)
 {
     free(_gameplay->current_word);
 
-    cvector_free(_bot->sequence); 
+    cvector_free(_computer->sequence); 
     cvector_free(_gameplay->network_points);
     cvector_free(_gameplay->timeline);
     cvector_free(_gameplay->words);
@@ -25,14 +25,14 @@ void cleanup(Bot* _bot, Gameplay* _gameplay)
 
 /**
  * Load settings and words list
- * @param _bot `Bot` struct, destionation for bot information
+ * @param _computer `Bot` struct, destionation for bot information
  * @param _gameplay `Gameplay` struct, destination for words list
  * @param _network `Network` struct, destination for network information
  * @param _start `Start` struct, destination for settings (house rules, number of players & others)
  * @param path path to `.json` file
  * @return int
 */
-int start(Bot* _bot, Gameplay* _gameplay, Network* _network, Start* _start, char* path)
+int start(Computer* _computer, Gameplay* _gameplay, Network* _network, Start* _start, char* path)
 {
     /* Load JSON */
     struct json_object_iterator it;
@@ -105,7 +105,7 @@ int start(Bot* _bot, Gameplay* _gameplay, Network* _network, Start* _start, char
 
                     for (size_t i = 0; i < strlen(temp_sequence); i++)
                     {
-                        cvector_push_back(_bot->sequence, temp_sequence[i]);
+                        cvector_push_back(_computer->sequence, temp_sequence[i]);
                     }
 
                     /* Free the string */
@@ -192,17 +192,17 @@ int start(Bot* _bot, Gameplay* _gameplay, Network* _network, Start* _start, char
 */
 int main()
 {
-    Bot* _bot = malloc(sizeof(Bot));
+    Computer* _computer = malloc(sizeof(Computer));
     Gameplay* _gameplay = malloc(sizeof(Gameplay));
     Network* _network = malloc(sizeof(Network));
     Start* _start = malloc(sizeof(Start));
 
-    _bot->sequence = NULL;
+    _computer->sequence = NULL;
 
     _gameplay->current_word = malloc(sizeof(char) * 1024);
     _gameplay->network_points = NULL;
 
-    if (start(_bot, _gameplay, _network, _start, "settings/settings.json") != 0)
+    if (start(_computer, _gameplay, _network, _start, "settings/settings.json") != 0)
     {
         goto end;
     }
@@ -219,6 +219,6 @@ int main()
 
 
 end:
-    cleanup(_bot, _gameplay);
+    cleanup(_computer, _gameplay);
     return 0;
 }

@@ -13,12 +13,12 @@
 struct networkPlayer_T;
 
 /**
- * Struct cotaining bot informations
+ * Struct cotaining informations for bot
 */
-typedef struct Bot
+typedef struct Computer
 {
     cvector_vector_type(char) sequence;
-} Bot;
+} Computer;
 
 /**
  * Struct containing gameplay informations

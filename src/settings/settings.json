@@ -2,7 +2,7 @@
     "kaladont-allowed": true,
     "players": 4,
     "words_path": ["settings/words.txt"],
-    "bot": [{
+    "computer": [{
         "sequence": "0010"
     }],
     "network": [{
