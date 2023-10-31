@@ -25,9 +25,8 @@ Tree* create_node(int value);
  * Learning minimax implementaion in actual code
  * @param tree `Tree` struct
  * @param depth depth of search
- * @param max is maximing player's turn
 */
-int minimax(Tree* tree, int depth, bool max);
+int minimax(Tree* tree, int depth);
 
 /**
  * Return word which computer played

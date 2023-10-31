@@ -56,3 +56,5 @@
 - [c-chatroom](https://github.com/lovenery/c-chatroom)
 - [Rječnik hrvatskih jezika](https://github.com/gigaly/rjecnik-hrvatskih-jezika)
 - [spisak-srpskih-reci](https://github.com/turanjanin/spisak-srpskih-reci)
+- [Algorithms Explained – minimax and alpha-beta pruning - Sebastian Lague](https://www.youtube.com/watch?v=l-hh51ncgDI)
+- [Coding Adventure: Chess - Sebastian Lague](https://www.youtube.com/watch?v=U4ogK0MIzqk)

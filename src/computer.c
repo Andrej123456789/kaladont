@@ -24,49 +24,29 @@ int minimum(int a, int b)
     return (a < b) ? a : b;
 }
 
-
-int minimax(Tree* tree, int depth, bool max)
+int minimax(Tree* tree, int depth)
 {
     if (depth == 0)
     {
         return tree->value;
     }
 
-    if (max)
-    {
-        int maxEval = -1000;
-        for (int i = 0; i < 2; i++)
-        {
-            if (tree->childrens[i] == NULL)
-            {
-                maxEval = tree->value;
-                break;
-            }
+    int bestEval = 1000;    /* -1000 if first node white; +1000 if first node black */
+                            /* basically, we give worst value so we can "filter" real value */
 
-            int eval = minimax(tree->childrens[i], depth - 1, false);
-            maxEval = maximum(maxEval, eval);
+    for (int i = 0; i < 2; i++)
+    {
+        if (tree->childrens[i] == NULL)
+        {
+            return tree->value;
         }
 
-        return maxEval;
+        int eval = -minimax(tree->childrens[i], depth - 1);
+        bestEval = minimum(eval, bestEval);     /* `maximum` if first node white; `minimum` if first node black */
+                                                /* basically, we give worst value so we can "filter" real value */
     }
 
-    else
-    {
-        int minEval = 1000;
-        for (int i = 0; i < 2; i++)
-        {
-            if (tree->childrens[i] == NULL)
-            {
-                minEval = tree->value;
-                break;
-            }
-
-            int eval = minimax(tree->childrens[i], depth - 1, true);
-            minEval = minimum(minEval, eval);
-        }
-
-        return minEval;
-    }
+    return bestEval;
 }
 
 char* computer_turn()
@@ -76,11 +56,11 @@ char* computer_turn()
     Tree* n1 = create_node(0);
     Tree* n2 = create_node(0);
 
-    Tree* n1n1 = create_node(-4);
-    Tree* n1n2 = create_node(0);
+    Tree* n1n1 = create_node(-6);
+    Tree* n1n2 = create_node(-8);
 
-    Tree* n2n1 = create_node(-8);
-    Tree* n2n2 = create_node(8);
+    Tree* n2n1 = create_node(9);
+    Tree* n2n2 = create_node(10);
 
     n1->childrens[0] = n1n1;
     n1->childrens[1] = n1n2;
@@ -91,7 +71,7 @@ char* computer_turn()
     t1->childrens[0] = n1;
     t1->childrens[1] = n2;
 
-    printf("Value: %d\n", minimax(t1, 10, true));
+    printf("Minimax: %d\n", minimax(t1, 2));
 
     free(t1);
     free(n1);
