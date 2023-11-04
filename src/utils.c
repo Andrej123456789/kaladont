@@ -13,6 +13,21 @@ bool find_element(cvector_vector_type(char*) vec, char* str)
     return false;
 }
 
+cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*) words, char* prefix)
+{
+    cvector_vector_type(char*) my_words = NULL;
+
+    for (size_t i = 0; i < cvector_size(words); i++)
+    {
+        if (strcmp(get_first_N_characters(words[i], 2), prefix) == 0)
+        {
+            cvector_push_back(my_words, words[i]);
+        }
+    }
+
+    return my_words;
+}
+
 char* get_first_N_characters(const char* input, int N)
 {
     char result[255];

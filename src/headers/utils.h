@@ -18,6 +18,13 @@
 bool find_element(cvector_vector_type(char*) vec, char* str);
 
 /**
+ * Get all words from words list starting on specified substring
+ * @param words words list
+ * @param prefix substring
+*/
+cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*) words, char* prefix);
+
+/**
  * Get first N characters
  * @param input string
  * @param N number of characters we are comparing

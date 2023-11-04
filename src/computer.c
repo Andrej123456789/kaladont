@@ -1,38 +1,14 @@
 #include "headers/computer.h"
 
-Tree* create_node(int value)
-{
-    Tree* result = malloc(sizeof(Tree));
-
-    if (result != NULL)
-    {
-        result->childrens[0] = NULL;
-        result->childrens[1] = NULL;
-        result->value = value;
-    }
-
-    return result;
-}
-
-int maximum(int a, int b) 
-{
-    return (a > b) ? a : b;
-}
-
-int minimum(int a, int b) 
-{
-    return (a < b) ? a : b;
-}
-
-int minimax(Tree* tree, int depth)
+/*int minimax(Tree* tree, int depth)
 {
     if (depth == 0)
     {
         return tree->value;
     }
 
-    int bestEval = 1000;    /* -1000 if first node white; +1000 if first node black */
-                            /* basically, we give worst value so we can "filter" real value */
+    int bestEval = 1000;    // -1000 if first node white; +1000 if first node black
+                            // basically, we give worst value so we can "filter" real value
 
     for (int i = 0; i < 2; i++)
     {
@@ -42,40 +18,84 @@ int minimax(Tree* tree, int depth)
         }
 
         int eval = -minimax(tree->childrens[i], depth - 1);
-        bestEval = minimum(eval, bestEval);     /* `maximum` if first node white; `minimum` if first node black */
-                                                /* basically, we give worst value so we can "filter" real value */
+        bestEval = minimum(eval, bestEval);     // `maximum` if first node white; `minimum` if first node black
+                                                // basically, we give worst value so we can "filter" real value
     }
 
     return bestEval;
+}*/
+
+void print_tree(Tree* tree) {
+    if (tree == NULL) {
+        return;
+    }
+
+    // Print the word of the current node
+    printf("%s\n", tree->word);
+
+    // Recursively print the words of the children nodes
+    for (size_t i = 0; i < cvector_size(tree->childrens); i++) {
+        print_tree(tree->childrens[i]);
+    }
 }
 
-char* computer_turn()
+Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64_t depth)
 {
-    Tree* t1 = create_node(0);
+    if (depth == 0)
+    {
+        Tree* children = malloc(sizeof(Tree));
+        strcpy(children->word, "end");
 
-    Tree* n1 = create_node(0);
-    Tree* n2 = create_node(0);
+        return children;
+    }
 
-    Tree* n1n1 = create_node(-6);
-    Tree* n1n2 = create_node(-8);
+    Tree* tree = malloc(sizeof(Tree));
 
-    Tree* n2n1 = create_node(9);
-    Tree* n2n2 = create_node(10);
+    strcpy(tree->word, current_word);
+    tree->childrens = NULL;
 
-    n1->childrens[0] = n1n1;
-    n1->childrens[1] = n1n2;
+    cvector_vector_type(char*) possible_words = get_all_words_starting_on(words, get_last_N_characters(current_word, 2)); 
 
-    n2->childrens[0] = n2n1;
-    n2->childrens[1] = n2n2;
+    if (cvector_size(possible_words) == 0)
+    {
+        Tree* children = malloc(sizeof(Tree));
+        strcpy(children->word, current_word);
 
-    t1->childrens[0] = n1;
-    t1->childrens[1] = n2;
+        return children;
+    }   
 
-    printf("Minimax: %d\n", minimax(t1, 2));
+    if (tree->childrens == NULL)
+    {
+        for (size_t i = 0; i < cvector_size(possible_words); i++)
+        {
+            // strcpy(children->word, possible_words[i]);
 
-    free(t1);
-    free(n1);
-    free(n2);
+            Tree* children = malloc(sizeof(Tree));
+            children = generate_tree(words, possible_words[i], depth - 1);
+
+            cvector_push_back(tree->childrens, children);
+        }
+    }
+
+    return tree;
+}
+
+int16_t evaluate_word(char* word)
+{
+    printf("%s\n", word);
+    return 0;
+}
+
+char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
+{
+    // TODO
+    // Compress words.txt so we complete words list and then we can remove this line
+    strcpy(_gameplay->current_word, "baka");
+
+    Tree* tree = generate_tree(_gameplay->words, _gameplay->current_word, _start->depth);
+    
+    print_tree(tree);
+    free(tree);
 
     return "test";
 }

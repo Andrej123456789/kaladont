@@ -112,6 +112,11 @@ int start(Computer* _computer, Gameplay* _gameplay, Network* _network, Start* _s
                     free(temp_sequence);
                 }
 
+                else if (strcmp(key2, "depth") == 0)
+                {
+                    _start->depth = json_object_get_uint64(val2);
+                }
+
                 json_object_iter_next(&it2);
             }
         }

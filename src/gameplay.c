@@ -202,7 +202,7 @@ void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start)
         {
             if (_computer->sequence[_gameplay->player] == '1')
             {
-                strcpy(user_input, computer_turn());
+                strcpy(user_input, computer_turn(_gameplay, _start));
             }
 
             else

@@ -75,10 +75,11 @@ typedef struct networkPlayer_T
  * @param players number of players
  * @param words_path path to words file
 */
-typedef struct Start
+typedef struct start_T
 {
     bool kaladont_allowed;
     uint64_t players;
+    uint64_t depth;
 
     cvector_vector_type(char*) words_path;
 } Start;
