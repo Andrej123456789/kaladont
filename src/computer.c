@@ -68,8 +68,6 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
     {
         for (size_t i = 0; i < cvector_size(possible_words); i++)
         {
-            // strcpy(children->word, possible_words[i]);
-
             Tree* children = malloc(sizeof(Tree));
             children = generate_tree(words, possible_words[i], depth - 1);
 
@@ -88,10 +86,6 @@ int16_t evaluate_word(char* word)
 
 char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
 {
-    // TODO
-    // Compress words.txt so we complete words list and then we can remove this line
-    strcpy(_gameplay->current_word, "baka");
-
     Tree* tree = generate_tree(_gameplay->words, _gameplay->current_word, _start->depth);
     
     print_tree(tree);
