@@ -15,6 +15,7 @@
         "functional": "c",
         "format": "c",
         "time.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "features.h": "c"
     }
 }

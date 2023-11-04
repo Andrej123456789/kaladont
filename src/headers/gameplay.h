@@ -79,7 +79,7 @@ typedef struct start_T
 {
     bool kaladont_allowed;
     uint64_t players;
-    uint64_t depth;
+    uint16_t depth;
 
     cvector_vector_type(char*) words_path;
 } Start;

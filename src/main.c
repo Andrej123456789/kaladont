@@ -114,7 +114,7 @@ int start(Computer* _computer, Gameplay* _gameplay, Network* _network, Start* _s
 
                 else if (strcmp(key2, "depth") == 0)
                 {
-                    _start->depth = json_object_get_uint64(val2);
+                    _start->depth = (uint16_t)json_object_get_int(val2);
                 }
 
                 json_object_iter_next(&it2);
