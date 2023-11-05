@@ -11,6 +11,8 @@
 struct gameplay_T;
 struct start_T;
 
+#define UNUSED(x) (void)(x)
+
 /**
  * Binary tree structure
 */

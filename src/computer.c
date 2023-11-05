@@ -25,17 +25,20 @@
     return bestEval;
 }*/
 
-void print_tree(Tree* tree) {
-    if (tree == NULL) {
-        return;
+void print_tree(Tree* tree, uint16_t depth) 
+{
+    if (tree == NULL) return;
+
+    for (uint16_t i = 0; i < depth; i++) 
+    {
+        printf("  ");
     }
 
-    // Print the word of the current node
-    printf("%s\n", tree->word);
+    printf("|- %s\n", tree->word);
 
-    // Recursively print the words of the children nodes
-    for (size_t i = 0; i < cvector_size(tree->childrens); i++) {
-        print_tree(tree->childrens[i]);
+    for (size_t i = 0; i < cvector_size(tree->childrens); i++) 
+    {
+        print_tree(tree->childrens[i], depth + 1);
     }
 }
 
@@ -45,6 +48,7 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
     {
         Tree* children = malloc(sizeof(Tree));
         strcpy(children->word, "end");
+        children->evaluation = evaluate_word("end");
 
         return children;
     }
@@ -60,6 +64,7 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
     {
         Tree* children = malloc(sizeof(Tree));
         strcpy(children->word, current_word);
+        children->evaluation = evaluate_word(current_word);
 
         return children;
     }   
@@ -68,6 +73,11 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
     {
         for (size_t i = 0; i < cvector_size(possible_words); i++)
         {
+            if (strcmp(possible_words[i], current_word) == 0)
+            {
+                continue;
+            }
+
             Tree* children = malloc(sizeof(Tree));
             children = generate_tree(words, possible_words[i], depth - 1);
 
@@ -80,16 +90,15 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
 
 int16_t evaluate_word(char* word)
 {
-    printf("%s\n", word);
+    UNUSED(word);
     return 0;
 }
 
 char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
 {
     Tree* tree = generate_tree(_gameplay->words, _gameplay->current_word, _start->depth);
-    
-    print_tree(tree);
-    free(tree);
+    print_tree(tree, _start->depth);
 
+    free(tree);
     return "test";
 }
