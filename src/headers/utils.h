@@ -1,7 +1,9 @@
 #pragma once
 
 #include <stdio.h>
+#include <stddef.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
 
@@ -39,6 +41,22 @@ char* get_first_N_characters(const char* input, int N);
  * @return char*
 */
 char* get_last_N_characters(const char* input, int N);
+
+/**
+ * Find minimum number between a and b
+ * @param a first number
+ * @param b second number
+ * @return int16_t
+*/
+int16_t maximum(int16_t a, int16_t b);
+
+/**
+ * Find maximum number between a and b
+ * @param a first number
+ * @param b second number
+ * @return int16_t
+*/
+int16_t minimum(int16_t a, int16_t b);
 
 /**
  * Remove whitespace from string

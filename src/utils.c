@@ -66,6 +66,16 @@ char* get_last_N_characters(const char* input, int N)
     return strdup(result);
 }
 
+int16_t maximum(int16_t a, int16_t b) 
+{
+    return (a > b) ? a : b;
+}
+
+int16_t minimum(int16_t a, int16_t b) 
+{
+    return (a < b) ? a : b;
+}
+
 char* trim_whitespace(char* str)
 {
     size_t len = 0;

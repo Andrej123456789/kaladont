@@ -34,7 +34,7 @@ void print_tree(Tree* tree, uint16_t depth)
         printf("  ");
     }
 
-    printf("|- %s\n", tree->word);
+    printf("|- %s (%"PRId16")\n", tree->word, tree->evaluation);
 
     for (size_t i = 0; i < cvector_size(tree->childrens); i++) 
     {
@@ -88,16 +88,81 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
     return tree;
 }
 
+int counter = 0;
+
 int16_t evaluate_word(char* word)
 {
     UNUSED(word);
-    return 0;
+
+    int16_t combinations[11] = {-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5};
+
+    int16_t result = combinations[counter];
+    counter++;
+
+    return result;
+}
+
+Tuple search_tree(Tree* tree, int16_t depth)
+{
+    /*if (depth == 0)
+    {
+        Tuple tuple;
+        
+        strcpy(tuple.word, tree->word);
+        tuple.evaluation = tree->evaluation;
+
+        return tuple;
+    }*/
+
+    int16_t bestEval = 1000;    // -1000 if first node white; +1000 if first node black
+                                // basically, we give worst value so we can "filter" real value
+
+    int16_t prevEval = bestEval;
+
+    char best_word[1024];
+
+    if (tree->childrens == NULL)
+    {
+        Tuple tuple;
+    
+        strcpy(tuple.word, tree->word);
+        tuple.evaluation = tree->evaluation;
+
+        return tuple;   
+    }
+
+    for (size_t i = 0; i < cvector_size(tree->childrens); i++)
+    {
+        Tuple tuple = search_tree(tree->childrens[i], depth - 1);
+
+        int16_t eval = -tuple.evaluation;
+        bestEval = minimum(eval, bestEval);     // `maximum` if first node white; `minimum` if first node black
+                                                // basically, we give worst value so we can "filter" real value
+
+        if (bestEval > prevEval)
+        {
+            strcpy(best_word, tuple.word);
+            prevEval = bestEval;
+        }
+    }
+
+    Tuple tuple;
+
+    strcpy(tuple.word, best_word);
+    tuple.evaluation = bestEval;
+
+    return tuple; 
 }
 
 char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
 {
+    strcpy(_gameplay->current_word, "baka");
+
     Tree* tree = generate_tree(_gameplay->words, _gameplay->current_word, _start->depth);
+    Tuple tuple = search_tree(tree, _start->depth);
+
     print_tree(tree, _start->depth);
+    printf("Result is: %s | %"PRId16"\n", tuple.word, tuple.evaluation);
 
     free(tree);
     return "test";

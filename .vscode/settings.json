@@ -16,6 +16,7 @@
         "format": "c",
         "time.h": "c",
         "string.h": "c",
-        "features.h": "c"
+        "features.h": "c",
+        "computer.h": "c"
     }
 }
