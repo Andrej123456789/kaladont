@@ -1,47 +1,5 @@
 #include "headers/computer.h"
 
-/*int minimax(Tree* tree, int depth)
-{
-    if (depth == 0)
-    {
-        return tree->value;
-    }
-
-    int bestEval = 1000;    // -1000 if first node white; +1000 if first node black
-                            // basically, we give worst value so we can "filter" real value
-
-    for (int i = 0; i < 2; i++)
-    {
-        if (tree->childrens[i] == NULL)
-        {
-            return tree->value;
-        }
-
-        int eval = -minimax(tree->childrens[i], depth - 1);
-        bestEval = minimum(eval, bestEval);     // `maximum` if first node white; `minimum` if first node black
-                                                // basically, we give worst value so we can "filter" real value
-    }
-
-    return bestEval;
-}*/
-
-void print_tree(Tree* tree, uint16_t depth) 
-{
-    if (tree == NULL) return;
-
-    for (uint16_t i = 0; i < depth; i++) 
-    {
-        printf("  ");
-    }
-
-    printf("|- %s (%"PRId16")\n", tree->word, tree->evaluation);
-
-    for (size_t i = 0; i < cvector_size(tree->childrens); i++) 
-    {
-        print_tree(tree->childrens[i], depth + 1);
-    }
-}
-
 Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64_t depth)
 {
     if (depth == 0)
@@ -102,6 +60,23 @@ int16_t evaluate_word(char* word)
     return result;
 }
 
+void print_tree(Tree* tree, uint16_t depth) 
+{
+    if (tree == NULL) return;
+
+    for (uint16_t i = 0; i < depth; i++) 
+    {
+        printf("  ");
+    }
+
+    printf("|- %s (%"PRId16")\n", tree->word, tree->evaluation);
+
+    for (size_t i = 0; i < cvector_size(tree->childrens); i++) 
+    {
+        print_tree(tree->childrens[i], depth + 1);
+    }
+}
+
 Tuple search_tree(Tree* tree, int16_t depth)
 {
     int16_t bestEval = 1000;    // -1000 if first node white; +1000 if first node black
@@ -122,8 +97,8 @@ Tuple search_tree(Tree* tree, int16_t depth)
         Tuple tuple = search_tree(tree->childrens[i], depth - 1);
 
         int16_t eval = -tuple.evaluation;
-        bestEval = minimum(eval, bestEval);     // `maximum` if first node white; `minimum` if first node black
-                                                // basically, we give worst value so we can "filter" real value
+        bestEval = minimum(eval, bestEval);     // `maximum` if first node white`
+                                                // `minimum` if first node black
 
         tree->evaluation = eval;
 
@@ -144,7 +119,7 @@ Tuple search_tree(Tree* tree, int16_t depth)
 
 char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
 {
-    strcpy(_gameplay->current_word, "baka");
+    char* word = malloc(sizeof(char) * WORD_LIMIT);
 
     Tree* tree = generate_tree(_gameplay->words, _gameplay->current_word, _start->depth);
     search_tree(tree, _start->depth);
@@ -152,6 +127,8 @@ char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
     print_tree(tree, _start->depth);
     printf("Result is: %s | %"PRId16"\n", tree->word, tree->evaluation);
 
+    strcpy(word, tree->word);
     free(tree);
-    return "test";
+
+    return word;
 }

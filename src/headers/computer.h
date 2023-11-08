@@ -15,7 +15,7 @@ struct start_T;
 
 #define UNUSED(x) (void)(x)
 
-#define WORD_LIMIT 1024
+#define WORD_LIMIT 64
 
 /**
  * Binary tree structure
@@ -57,6 +57,13 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
  * @return int16_t
 */
 int16_t evaluate_word(char* word);
+
+/**
+ * Print a tree
+ * @param tree tree
+ * @param depth depth of a tree
+*/
+void print_tree(Tree* tree, uint16_t depth);
 
 /**
  * Search best word for computer
