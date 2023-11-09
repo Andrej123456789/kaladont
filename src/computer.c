@@ -2,15 +2,6 @@
 
 Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64_t depth)
 {
-    if (depth == 0)
-    {
-        Tree* children = malloc(sizeof(Tree));
-        strcpy(children->word, "end");
-        children->evaluation = evaluate_word("end");
-
-        return children;
-    }
-
     Tree* tree = malloc(sizeof(Tree));
 
     strcpy(tree->word, current_word);
@@ -36,6 +27,11 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
                 continue;
             }
 
+            if (depth == 0)
+            {
+                continue;
+            }
+
             Tree* children = malloc(sizeof(Tree));
             children = generate_tree(words, possible_words[i], depth - 1);
 
@@ -52,7 +48,7 @@ int16_t evaluate_word(char* word)
 {
     UNUSED(word);
 
-    int16_t combinations[11] = {-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5};
+    int16_t combinations[11] = {0, -6, -3, -4, -1, 0, 1, 2, 3, 4, 5};
 
     int16_t result = combinations[counter];
     counter++;
@@ -100,13 +96,7 @@ Tuple search_tree(Tree* tree, int16_t depth)
         bestEval = minimum(eval, bestEval);     // `maximum` if first node white`
                                                 // `minimum` if first node black
 
-        tree->evaluation = eval;
-
-        if (bestEval < tree->evaluation)        // > if first node is white
-                                                // < if first node is black
-        {
-            strcpy(tree->word, tuple.word);
-        }
+        tree->evaluation = bestEval;
     }
 
     Tuple tuple;
@@ -121,7 +111,16 @@ char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
 {
     char* word = malloc(sizeof(char) * WORD_LIMIT);
 
+    strcpy(_gameplay->current_word, "baka");
+
     Tree* tree = generate_tree(_gameplay->words, _gameplay->current_word, _start->depth);
+
+    if (tree == NULL)
+    {
+        printf("Error generating a tree!\n");
+        return "";
+    }
+
     search_tree(tree, _start->depth);
 
     print_tree(tree, _start->depth);
