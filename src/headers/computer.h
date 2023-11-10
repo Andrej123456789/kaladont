@@ -69,9 +69,10 @@ void print_tree(Tree* tree, uint16_t depth);
  * Search best word for computer
  * @param tree tree containing all words
  * @param depth depth of search
+ * @param max_depth depth of a tree
  * @return `Tuple` struct
 */
-Tuple search_tree(Tree* tree, int16_t depth);
+Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth);
 
 /**
  * Return word which computer played
