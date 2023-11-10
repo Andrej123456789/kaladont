@@ -188,7 +188,7 @@ void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start)
     _gameplay->player = 0;
 
     Player players[_start->players];
-    char user_input[WORD_LIMIT];
+    char user_input[WORD_LIMIT + 1];
 
     for (size_t i = 0; i < _start->players; i++)
     {
@@ -210,10 +210,13 @@ void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start)
 
             else
             {
+                char custom_format[20];
+                sprintf(custom_format, "%%%ds", WORD_LIMIT);
+
                 printf("Previous word is: %s\n", _gameplay->current_word);
 
                 printf("Player %lu: ", _gameplay->player);
-                scanf("%63s", user_input); /* TODO: use WORD_LIMIT value */
+                scanf(custom_format, user_input);
             }
 
             int result = gameplay(_gameplay, NULL, user_input, false);

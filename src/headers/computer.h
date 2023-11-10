@@ -15,7 +15,7 @@ struct start_T;
 
 #define UNUSED(x) (void)(x)
 
-#define WORD_LIMIT 64
+#define WORD_LIMIT 31
 
 /**
  * Binary tree structure
