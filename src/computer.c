@@ -48,7 +48,7 @@ int16_t evaluate_word(char* word)
 {
     UNUSED(word);
 
-    int16_t combinations[11] = {0, -6, -3, -4, -1, 0, 1, 2, 3, 4, 5};
+    int16_t combinations[11] = {-6, 3, -4, 1, 10, 1, 2, 3, 4, 5};
 
     int16_t result = combinations[counter];
     counter++;
@@ -78,8 +78,6 @@ Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth)
     int16_t bestEval = 1000;    // -1000 if first node white; +1000 if first node black
                                 // basically, we give worst value so we can "filter" real value
 
-    int16_t prevEval = bestEval;
-
     if (tree->childrens == NULL)
     {
         Tuple tuple;
@@ -95,17 +93,15 @@ Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth)
         Tuple tuple = search_tree(tree->childrens[i], depth - 1, max_depth);
 
         int16_t eval = -tuple.evaluation;
-        bestEval = -minimum(eval, bestEval);     // `maximum` if first node white`
+        bestEval = minimum(eval, bestEval);     // `maximum` if first node white`
                                                 // `minimum` if first node black
 
         tree->evaluation = bestEval;
 
-        if (depth == max_depth && bestEval < prevEval)
+        if (depth == max_depth)
         {
             strcpy(tree->word, tuple.word);
         }
-
-        prevEval = bestEval;
     }
 
     Tuple tuple;
