@@ -72,7 +72,7 @@ void print_tree(Tree* tree, uint16_t depth);
  * @param max_depth depth of a tree
  * @return `Tuple` struct
 */
-Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth);
+Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta);
 
 /**
  * Return word which computer played

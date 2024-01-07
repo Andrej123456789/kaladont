@@ -15,6 +15,7 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
         strcpy(children->word, current_word);
         children->evaluation = evaluate_word(current_word);
 
+        children->childrens = NULL;
         return children;
     }   
 
@@ -73,7 +74,7 @@ void print_tree(Tree* tree, uint16_t depth)
     }
 }
 
-Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth)
+Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta)
 {
     int16_t bestEval = 1000;    // -1000 if first node white; +1000 if first node black
                                 // basically, we give worst value so we can "filter" real value
@@ -90,13 +91,19 @@ Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth)
 
     for (size_t i = 0; i < cvector_size(tree->childrens); i++)
     {
-        Tuple tuple = search_tree(tree->childrens[i], depth - 1, max_depth);
+        Tuple tuple = search_tree(tree->childrens[i], depth - 1, max_depth, alpha, beta);
 
         int16_t eval = -tuple.evaluation;
         bestEval = minimum(eval, bestEval);     // `maximum` if first node white`
                                                 // `minimum` if first node black
 
         tree->evaluation = bestEval;
+
+        beta = minimum(beta, eval);
+        if (beta <= alpha) 
+        {
+            break;
+        }
 
         if (depth == max_depth)
         {
@@ -124,7 +131,7 @@ char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
         return "";
     }
 
-    search_tree(tree, _start->depth, _start->depth);
+    search_tree(tree, _start->depth, _start->depth, -1000, 1000);
     printf("Computer choice is: %s | %"PRId16"\n", tree->word, tree->evaluation);
 
     strcpy(word, tree->word);
