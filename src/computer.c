@@ -95,7 +95,7 @@ Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth)
         Tuple tuple = search_tree(tree->childrens[i], depth - 1, max_depth);
 
         int16_t eval = -tuple.evaluation;
-        bestEval = minimum(eval, bestEval);     // `maximum` if first node white`
+        bestEval = -minimum(eval, bestEval);     // `maximum` if first node white`
                                                 // `minimum` if first node black
 
         tree->evaluation = bestEval;
