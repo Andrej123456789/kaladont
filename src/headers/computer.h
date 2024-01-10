@@ -25,22 +25,17 @@ struct start_T;
 */
 typedef struct Tree
 {
-    char word[WORD_LIMIT];
+    char* word;
     int16_t evaluation;
 
     cvector_vector_type(struct Tree*) childrens;
 } Tree;
 
 /**
- * Tuple for `search_tree` function
- * @param word word
- * @param evaluation value which tells us how good word is
+ * Clean a tree
+ * @param tree tree
 */
-typedef struct Tuple
-{
-    char word[WORD_LIMIT];
-    int16_t evaluation;
-} Tuple;
+void clean_tree(Tree* tree);
 
 /**
  * Generate tree of all playable words
@@ -70,9 +65,11 @@ void print_tree(Tree* tree, uint16_t depth);
  * @param tree tree containing all words
  * @param depth depth of search
  * @param max_depth depth of a tree
+ * @param alpha alpha value
+ * @param beta beta value
  * @return `Tuple` struct
 */
-Tuple search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta);
+Tree search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta);
 
 /**
  * Return word which computer played
