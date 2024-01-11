@@ -12,6 +12,15 @@
 
 /**
  * # IMPROVE THIS FUNCTION
+ * @brief Erases element in c_vector
+ * @param vec vector
+ * @param str string (element)
+ * @return bool
+*/
+bool erase_element(cvector_vector_type(char*) vec, char* str);
+
+/**
+ * # IMPROVE THIS FUNCTION
  * @brief Finds element in c_vector
  * @param vec vector
  * @param str string (element)

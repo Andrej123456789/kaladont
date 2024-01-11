@@ -73,6 +73,7 @@ int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
                                                         && strlen(input) > 2)
     {
         printf("You have one point!\n");
+        erase_element(_gameplay->words, input);
 
         if (network)
         {
