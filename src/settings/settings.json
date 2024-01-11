@@ -1,7 +1,7 @@
 {
     "kaladont-allowed": true,
     "players": 4,
-    "words_path": ["settings/small2.txt"],
+    "words_path": ["settings/words.txt"],
     "computer": [{
         "depth": 3,
         "sequence": "0010"

@@ -26,9 +26,9 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
     tree->word = malloc(sizeof(char) * strlen(current_word) + 1);
     strcpy(tree->word, current_word);
 
-    cvector_vector_type(char*) possible_words = get_all_words_starting_on(words, get_last_N_characters(current_word, 2)); 
+    cvector_vector_type(char*) possible_words = get_all_words_starting_on(words, get_last_N_characters(current_word, 2));
 
-    if (cvector_size(possible_words) == 0)
+    if (cvector_size(possible_words) == 0 || depth == 0)
     {
         Tree* children = malloc(sizeof(Tree));
 
