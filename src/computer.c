@@ -35,11 +35,11 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
         children->word = malloc(sizeof(char) * strlen(current_word) + 1);
         strcpy(children->word, current_word);
 
-        children->evaluation = evaluate_word(current_word);
+        children->evaluation = -1000;
         children->childrens = NULL;
 
         return children;
-    }   
+    }
 
     if (tree->childrens == NULL)
     {
@@ -56,6 +56,8 @@ Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64
             }
 
             Tree* children = malloc(sizeof(Tree));
+
+            erase_element(words, current_word);
             children = generate_tree(words, possible_words[i], depth - 1);
 
             cvector_push_back(tree->childrens, children);
@@ -96,55 +98,49 @@ void print_tree(Tree* tree, uint16_t depth)
     }
 }
 
-Tree search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta)
+Tree* search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta)
 {
     int16_t bestEval = 1000;    // -1000 if first node white; +1000 if first node black
                                 // basically, we give worst value so we can "filter" real value
 
-    if (tree->childrens == NULL)
+    char* bestWord = malloc(sizeof(char) * 1);
+
+    if (tree->childrens == NULL || depth == 0)
     {
-        Tree node;
-    
-        node.word = malloc(sizeof(char) * strlen(tree->word) + 1);
-        strcpy(node.word, tree->word);
-
-        node.evaluation = evaluate_word(tree->word);
-        node.childrens = NULL;
-
-        return node;
+        tree->evaluation = evaluate_word(tree->word);
+        return tree;
     }
 
     for (size_t i = 0; i < cvector_size(tree->childrens); i++)
     {
-        Tree node = search_tree(tree->childrens[i], depth - 1, max_depth, alpha, beta);
+        Tree* node = search_tree(tree->childrens[i], depth - 1, max_depth, alpha, beta);
 
-        int16_t eval = -node.evaluation;
+        int16_t eval = -node->evaluation;
         bestEval = minimum(eval, bestEval);     // `maximum` if first node white`
                                                 // `minimum` if first node black
 
-        tree->evaluation = bestEval;
+        tree->evaluation = eval;
+
+        if (bestEval == eval)
+        {
+            bestWord = realloc(bestWord, sizeof(char) * strlen(node->word) + 1);
+            strcpy(bestWord, node->word);
+        }
 
         beta = minimum(beta, eval);
         if (beta <= alpha) 
         {
             break;
         }
-
-        if (depth == max_depth)
-        {
-            strcpy(tree->word, node.word);
-        }
     }
 
-    Tree node;
+    tree->evaluation = bestEval;
 
-    node.word = malloc(sizeof(char) * strlen(tree->word) + 1);
-    strcpy(node.word, tree->word);
+    tree->word = realloc(tree->word, sizeof(char) * strlen(bestWord) + 1);
+    strcpy(tree->word, bestWord);
 
-    node.evaluation = bestEval;
-    node.childrens = NULL;
-
-    return node;
+    free(bestWord);
+    return tree;
 }
 
 char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
@@ -160,6 +156,7 @@ char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
     }
 
     search_tree(tree, _start->depth, _start->depth, -1000, 1000);
+    print_tree(tree, _start->depth);
     printf("Computer choice is: %s | %"PRId16"\n", tree->word, tree->evaluation);
 
     strcpy(word, tree->word);

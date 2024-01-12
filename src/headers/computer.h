@@ -69,7 +69,7 @@ void print_tree(Tree* tree, uint16_t depth);
  * @param beta beta value
  * @return `Tuple` struct
 */
-Tree search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta);
+Tree* search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta);
 
 /**
  * Return word which computer played

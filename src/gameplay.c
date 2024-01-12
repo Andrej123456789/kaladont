@@ -199,49 +199,39 @@ void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start)
     set_random_word(_gameplay);
     while (!game_finished)
     {
-        while (true)
+        if (_computer->sequence[_gameplay->player] == '1')
         {
-            if (_computer->sequence[_gameplay->player] == '1')
-            {
-                char* computer_input = computer_turn(_gameplay, _start);
+            char* computer_input = computer_turn(_gameplay, _start);
 
-                strcpy(user_input, computer_input);
-                free(computer_input);
-            }
+            strcpy(user_input, computer_input);
+            free(computer_input);
+        }
 
-            else
-            {
-                char custom_format[20];
-                sprintf(custom_format, "%%%ds", WORD_LIMIT);
+        else
+        {
+            char custom_format[6];
+            sprintf(custom_format, "%%%ds", WORD_LIMIT);
 
-                printf("Previous word is: %s\n", _gameplay->current_word);
+            printf("Previous word is: %s\n", _gameplay->current_word);
 
-                printf("Player %lu: ", _gameplay->player);
-                scanf(custom_format, user_input);
-            }
+            printf("Player %lu: ", _gameplay->player);
+            scanf(custom_format, user_input);
+        }
 
-            int result = gameplay(_gameplay, NULL, user_input, false);
+        int result = gameplay(_gameplay, NULL, user_input, false);
 
-            if (result == -1)
-            {
-                set_point(_gameplay, players);
-                read_points(players, _start->players);
+        if (result == -1)
+        {
+            set_point(_gameplay, players);
+            read_points(players, _start->players);
 
-                game_finished = true;
-                break;
-            }
+            game_finished = true;
+            break;
+        }
 
-            else if (result == 1)
-            {
-                set_point(_gameplay, players);
-            }
-
-            else
-            {
-                break;
-            }
-
-            next_player(_gameplay, _start);
+        else if (result == 1)
+        {
+            set_point(_gameplay, players);
         }
 
         next_player(_gameplay, _start);
