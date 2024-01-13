@@ -1,16 +1,14 @@
 #include "headers/utils.h"
 
-bool erase_element(cvector_vector_type(char*) vec, char* str)
+void erase_element(cvector_vector_type(char*)* vec, char* str)
 {
-    for (size_t i = 0; i < cvector_size(vec); i++)
+    for (size_t i = 0; i < cvector_size(*vec); i++)
     {
-        if (strcmp(str, vec[i]) == 0)
+        if (strcmp(str, (*vec)[i]) == 0)
         {
-            cvector_erase(vec, i);
+            cvector_erase(*vec, i);
         }
     }
-    
-    return false;
 }
 
 bool find_element(cvector_vector_type(char*) vec, char* str)

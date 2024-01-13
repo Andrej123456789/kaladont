@@ -14,14 +14,6 @@
 struct networkPlayer_T;
 
 /**
- * Struct cotaining informations for bot
-*/
-typedef struct Computer
-{
-    cvector_vector_type(char) sequence;
-} Computer;
-
-/**
  * Struct containing gameplay informations
  * @param current_word current word
  * @param player id of current player
@@ -50,15 +42,6 @@ typedef struct Network
 } Network;
 
 /**
- * Struct containing player's informationas
- * @param points number of points
-*/
-typedef struct Player
-{
-    uint64_t points;
-} Player;
-
-/**
  * Struct containing network player's informations
  * @param name player's name
  * @param points number of points
@@ -69,10 +52,22 @@ typedef struct networkPlayer_T
     uint64_t points;
 } NetworkPlayer;
 
+
+/**
+ * Struct containing player's informationas
+ * @param points number of points
+*/
+typedef struct Player
+{
+    uint64_t points;
+} Player;
+
 /**
  * Struct containing settings
  * @param kaladont_allowed is word `kaladont` allowed
  * @param players number of players
+ * @param depth depth of search in computer player
+ * @param sequence sequence containing human and computer players 
  * @param words_path path to words file
 */
 typedef struct start_T
@@ -81,41 +76,42 @@ typedef struct start_T
     uint64_t players;
     uint16_t depth;
 
+    cvector_vector_type(char) sequence;
     cvector_vector_type(char*) words_path;
 } Start;
 
 /* ------------------------------------ */
 
 /**
- * Set current player to next player
+ * Sets a current player to next player
  * @param _gameplay `Gameplay` struct
  * @param _start `Start` struct
 */
 void next_player(Gameplay* _gameplay, Start* _start);
 
 /**
- * Get random word from `words` list
+ * Gets a random word from `words` list
  * @param _gameplay `Gameplay` struct
  * @return char*
 */
 char* random_word(Gameplay* _gameplay);
 
 /**
- * Read points from local players
+ * Reads points from local players
  * @param players players list
  * @param num_players number of players in game
 */
 void read_points(Player players[], uint64_t num_players);
 
 /**
- * Set points to local player
+ * Sets points to a local player
  * @param _gameplay `Gameplay` struct
  * @param players players list
 */
 void set_point(Gameplay* _gameplay, Player players[]);
 
 /**
- * Get random word from `random_word`, push back it to `timeline` and copy it to `current_word`
+ * Gets a random word from `random_word`, push back it to `timeline` and copies it to `current_word`
  * @param _gameplay `Gameplay` struct
 */
 void set_random_word(Gameplay* _gameplay);
@@ -140,8 +136,7 @@ void network_gameplay(Gameplay* _gameplay, Network* _network);
 
 /**
  * Entry point for local gameplay
- * @param _computer `Computer` struct
  * @param _gameplay `Gameplay` struct
  * @param _start `Start` struct
 */
-void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start);
+void local_gameplay(Gameplay* _gameplay, Start* _start);

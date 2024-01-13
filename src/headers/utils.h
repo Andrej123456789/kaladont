@@ -15,9 +15,9 @@
  * @brief Erases element in c_vector
  * @param vec vector
  * @param str string (element)
- * @return bool
+ * @return cvector_vector_type
 */
-bool erase_element(cvector_vector_type(char*) vec, char* str);
+void erase_element(cvector_vector_type(char*)* vec, char* str);
 
 /**
  * # IMPROVE THIS FUNCTION

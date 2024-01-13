@@ -10,17 +10,18 @@
 
 /**
  * Free all allocated stuff
- * @param _computer `Bot` struct
  * @param _gameplay `Gameplay` struct
+ * @param _start `Start` struct
 */
-void cleanup(Computer* _computer, Gameplay* _gameplay)
+void cleanup(Gameplay* _gameplay, Start* _start)
 {
     free(_gameplay->current_word);
 
-    cvector_free(_computer->sequence); 
     cvector_free(_gameplay->network_points);
     cvector_free(_gameplay->timeline);
     cvector_free(_gameplay->words);
+
+    cvector_free(_start->sequence); 
 }
 
 /**
@@ -32,7 +33,7 @@ void cleanup(Computer* _computer, Gameplay* _gameplay)
  * @param path path to `.json` file
  * @return int
 */
-int start(Computer* _computer, Gameplay* _gameplay, Network* _network, Start* _start, char* path)
+int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
 {
     /* Load JSON */
     struct json_object_iterator it;
@@ -105,7 +106,7 @@ int start(Computer* _computer, Gameplay* _gameplay, Network* _network, Start* _s
 
                     for (size_t i = 0; i < strlen(temp_sequence); i++)
                     {
-                        cvector_push_back(_computer->sequence, temp_sequence[i]);
+                        cvector_push_back(_start->sequence, temp_sequence[i]);
                     }
 
                     /* Free the string */
@@ -197,17 +198,16 @@ int start(Computer* _computer, Gameplay* _gameplay, Network* _network, Start* _s
 */
 int main()
 {
-    Computer* _computer = malloc(sizeof(Computer));
     Gameplay* _gameplay = malloc(sizeof(Gameplay));
     Network* _network = malloc(sizeof(Network));
     Start* _start = malloc(sizeof(Start));
 
-    _computer->sequence = NULL;
-
     _gameplay->current_word = malloc(sizeof(char) * 1024);
     _gameplay->network_points = NULL;
 
-    if (start(_computer, _gameplay, _network, _start, "settings/settings.json") != 0)
+    _start->sequence = NULL;
+
+    if (start(_gameplay, _network, _start, "settings/settings.json") != 0)
     {
         goto end;
     }
@@ -219,11 +219,11 @@ int main()
 
     else
     {
-        local_gameplay(_computer, _gameplay, _start);
+        local_gameplay(_gameplay, _start);
     }
 
 
 end:
-    cleanup(_computer, _gameplay);
+    cleanup(_gameplay, _start);
     return 0;
 }

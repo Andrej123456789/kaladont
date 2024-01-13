@@ -17,62 +17,31 @@ struct start_T;
 
 #define WORD_LIMIT 32
 
-/**
- * Binary tree structure
- * @param word word
- * @param evaluation value which tells us how good word is
- * @param childrens our children nodes
-*/
-typedef struct Tree
+typedef struct Evaluation
 {
-    char* word;
-    int16_t evaluation;
+    char* bestWord;
+} Evaluation;
 
-    cvector_vector_type(struct Tree*) childrens;
-} Tree;
-
-/**
- * Clean a tree
- * @param tree tree
-*/
-void clean_tree(Tree* tree);
+/* ------------------------------------ */
 
 /**
- * Generate tree of all playable words
- * @param words words list
- * @param current_word current word
- * @param depth depth of the tree
- * @return `Tree` struct
-*/
-Tree* generate_tree(cvector_vector_type(char*) words, char* current_word, uint64_t depth);
-
-/**
- * Evaluate a word
+ * Evaluates a word
  * @param word word to be evaluated
  * @return int16_t
 */
 int16_t evaluate_word(char* word);
 
 /**
- * Print a tree
- * @param tree tree
- * @param depth depth of a tree
+ * Searches for the best word, copies word into `evaluation` variable
+ * @param _gameplay `Gameplay` struct
+ * @param evaluation `Evaluation` struct
+ * @param depth current depth
+ * @return int16_t
 */
-void print_tree(Tree* tree, uint16_t depth);
+int16_t search(struct gameplay_T _gameplay, Evaluation* evaluation, uint16_t depth);
 
 /**
- * Search best word for computer
- * @param tree tree containing all words
- * @param depth depth of search
- * @param max_depth depth of a tree
- * @param alpha alpha value
- * @param beta beta value
- * @return `Tuple` struct
-*/
-Tree* search_tree(Tree* tree, int16_t depth, int16_t max_depth, int16_t alpha, int16_t beta);
-
-/**
- * Return word which computer played
+ * Returns a word which computer played
  * @param _gameplay `Gameplay` struct
  * @param _start `Start` struct
  * @return char*

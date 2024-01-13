@@ -5,3 +5,5 @@ enciklopedija
 kabanica
 car
 carica
+jabuka
+kaladont

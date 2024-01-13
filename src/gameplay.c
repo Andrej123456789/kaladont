@@ -73,7 +73,7 @@ int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
                                                         && strlen(input) > 2)
     {
         printf("You have one point!\n");
-        erase_element(_gameplay->words, input);
+        erase_element(&_gameplay->words, input);
 
         if (network)
         {
@@ -183,7 +183,7 @@ void network_gameplay(Gameplay* _gameplay, Network* _network)
     return;
 }
 
-void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start)
+void local_gameplay(Gameplay* _gameplay, Start* _start)
 {
     bool game_finished = false;
     _gameplay->player = 0;
@@ -199,7 +199,7 @@ void local_gameplay(Computer* _computer, Gameplay* _gameplay, Start* _start)
     set_random_word(_gameplay);
     while (!game_finished)
     {
-        if (_computer->sequence[_gameplay->player] == '1')
+        if (_start->sequence[_gameplay->player] == '1')
         {
             char* computer_input = computer_turn(_gameplay, _start);
 
