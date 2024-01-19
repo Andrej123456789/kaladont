@@ -41,7 +41,7 @@ cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*) 
 
 char* get_first_N_characters(const char* input, int N)
 {
-    char result[255];
+    char result[3];
 
     if (N <= 0) 
     {
@@ -57,7 +57,7 @@ char* get_first_N_characters(const char* input, int N)
 
 char* get_last_N_characters(const char* input, int N)
 {
-    char result[255];
+    char result[3];
 
     if (N <= 0) 
     {

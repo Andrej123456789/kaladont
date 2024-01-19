@@ -101,7 +101,7 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
 
                 if (strcmp(key2, "sequence") == 0)
                 {
-                    char* temp_sequence = realloc(temp_sequence, sizeof(char) * json_object_get_string_len(val2) + 1);
+                    char* temp_sequence = malloc(sizeof(char) * json_object_get_string_len(val2) + 1);
                     strcpy(temp_sequence, json_object_get_string(val2));
 
                     for (size_t i = 0; i < strlen(temp_sequence); i++)

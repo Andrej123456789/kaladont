@@ -38,7 +38,7 @@ int16_t evaluate_word(char* word);
  * @param depth current depth
  * @return int16_t
 */
-int16_t search(struct gameplay_T _gameplay, Evaluation* evaluation, uint16_t depth);
+int16_t search(struct gameplay_T* _gameplay, Evaluation* evaluation, uint16_t depth);
 
 /**
  * Returns a word which computer played
