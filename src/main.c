@@ -16,22 +16,31 @@
 void cleanup(Gameplay* _gameplay, Start* _start)
 {
     free(_gameplay->current_word);
-
+	// Free vectors
     cvector_free(_gameplay->network_points);
     cvector_free(_gameplay->timeline);
     cvector_free(_gameplay->words);
-
     cvector_free(_start->sequence); 
+    // Optional: set the pointer to NULL after freeing to avoid dangling pointers
+    _gameplay->current_word = NULL; 
+    _gameplay->network_points = NULL;
+    _gameplay->timeline = NULL;
+    _gameplay->words = NULL;
+    _start->sequence = NULL; 
+    
+       // Optional: free the structures themselves	(redusing more memory usage as if possible)
+     free(_gameplay);
+     free(_start);
 }
 
 /**
  * Load settings and words list
- * @param _computer `Bot` struct, destionation for bot information
+ * @param _computer `Bot` struct, destination for bot information
  * @param _gameplay `Gameplay` struct, destination for words list
  * @param _network `Network` struct, destination for network information
  * @param _start `Start` struct, destination for settings (house rules, number of players & others)
  * @param path path to `.json` file
- * @return int
+ * @return int 0 if successful, 1 if failed
 */
 int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
 {
@@ -53,7 +62,7 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
         {
             _start->kaladont_allowed = json_object_get_boolean(val);
         }
-
+	// Parse the number of players
         else if (strcmp(key, "players") == 0)
         {
             if (json_object_get_uint64(val) < UINT64_MAX)
@@ -67,7 +76,7 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
                 printf("Setting number of players to default, 20.\n");
             }
         }
-
+	// Parse the paths to the words files
         else if (strcmp(key, "words_path") == 0)
         {
             for (size_t i = 0; i < json_object_array_length(val); i++) 
@@ -76,7 +85,7 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
                 cvector_push_back(_start->words_path, strdup(json_object_get_string(element)));
             }
         }
-
+	 // Parse computer settings
         else if (strcmp(key, "computer") == 0)
         {
             struct json_object* bot;
@@ -121,7 +130,7 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
                 json_object_iter_next(&it2);
             }
         }
-
+	// Parse network settings
         else if (strcmp(key, "network") == 0)
         {
             struct json_object* network;
@@ -172,11 +181,11 @@ int start(Gameplay* _gameplay, Network* _network, Start* _start, char* path)
     {
         file = fopen(_start->words_path[i], "r");
 
-        if (file == NULL)
-        {
-            printf("Failed to load file %s!\n", _start->words_path[i]);
-            return 1;
-        }
+if (file == NULL)
+{
+    fprintf(stderr, "Failed to load file %s!\n", _start->words_path[i]);
+    return 1;
+}
 
         uint64_t j = 0;
         while (fgets(buffer, sizeof(buffer), file))
