@@ -1,15 +1,15 @@
 # kaladont
 
-[Kaladont](https://en.wikipedia.org/wiki/Kaladont) is South Slavic word game popular in BiH, Croatia, Montenegro, North Macedonia, Serbia and Slovenia.
+[Kaladont](https://en.wikipedia.org/wiki/Kaladont) is a South Slavic word game popular in BiH, Croatia, Montenegro, North Macedonia, Serbia and Slovenia.
 
 ## Rules
 
-- Players say word which begins with the last two letters of previous word.
-  - word must have atleast `3` letters
+- Players say a word which begins with the last two letters of previous word.
+  - word must have at least `3` letters
   - word cannot be made-up
   - previous word cannot be repeated
   - names are not allowed
-- Winner is who says word ending on `nt`
+- Winner is who says a word ending on `nt`
   - in some house rules, you are not allowed to say word `kaladont`; however, house rules are possible to modify in `settings.json`
 
 ## TODO
