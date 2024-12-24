@@ -124,6 +124,8 @@ void set_random_word(Gameplay* _gameplay);
  * @param np network players
  * @param input user input
  * @param network is multiplayer mode enabled
+ * @return int [0 - no point, 1 - give a point to the player, 
+ * -1 - game finished with a point, -2 - game finished without a point]
 */
 int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network);
 

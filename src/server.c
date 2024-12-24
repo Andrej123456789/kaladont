@@ -128,6 +128,17 @@ void* client_handler(void* client_arg)
                 leave_flag = 1;
             }
 
+            else if (result == -2)
+            {
+                for (size_t i = 0; i < cvector_size(_gameplay->network_points); i++)
+                {
+                    sprintf(send_buffer, "Player %s has %"PRIu64" points!\n", _gameplay->network_points[i]->name, _gameplay->network_points[i]->points);
+                    send_to_all_clients(send_buffer);
+                }
+
+                leave_flag = 1;
+            }
+
             else if (result == 1)
             {
                 for (size_t i = 0; i < cvector_size(_gameplay->network_points); i++)

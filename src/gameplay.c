@@ -52,7 +52,7 @@ int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
     if (strcmp(input, "exit") == 0)
     {
         printf("Exiting...\n");
-        return -1;
+        return -2;
     }
 
     else if (strcmp(input, "next") == 0)
@@ -223,6 +223,14 @@ void local_gameplay(Gameplay* _gameplay, Start* _start)
         if (result == -1)
         {
             set_point(_gameplay, players);
+            read_points(players, _start->players);
+
+            game_finished = true;
+            break;
+        }
+
+        else if (result == -2)
+        {
             read_points(players, _start->players);
 
             game_finished = true;

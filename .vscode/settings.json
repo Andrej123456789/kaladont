@@ -19,6 +19,7 @@
         "features.h": "c",
         "computer.h": "c",
         "utils.h": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "server.h": "c"
     }
 }
