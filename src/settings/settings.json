@@ -1,13 +1,18 @@
 {
-    "kaladont-allowed": true,
-    "players": 4,
-    "words_path": ["settings/words.txt"],
+    "players": 4, // number of players
+    "players_sequence": "0010", // 0 - local player, 1 - computer player, 2 - network player
+
+    "kaladont_allowed": true, // is it allowed to say word `kaladont`
+    "wait_for_correct_word": false, // should we wait for player to say correct word
+
+    "words_path": ["settings/words.txt"], // paths to the text files containing words, every line contains one word
+
     "computer": [{
-        "depth": 1,
-        "sequence": "0010"
+        "depth": 1 // depth of minmax search
     }],
+
     "network": [{
-        "enabled": false,
-        "port": 5555
+        "enabled": false, // are network players enabled
+        "port": 5555 // server's port
     }]
 }

@@ -1,4 +1,20 @@
+/**
+ * @author Andrej123456789 (Andrej Bartulin)
+ * PROJECT: kaladont
+ * LICENSE: MIT license
+ * DESCRIPTION: Implementation of computer player
+ */
+
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
 #include "headers/computer.h"
+#include "headers/gameplay.h"
+#include "headers/utils.h"
 
 int16_t evaluate_word(char* word)
 {
@@ -12,7 +28,7 @@ int16_t evaluate_word(char* word)
     return result;
 }
 
-int16_t search(Gameplay* _gameplay, Evaluation* evaluation, uint16_t depth)
+int16_t search(Gameplay* _gameplay, char* best_word, uint16_t depth)
 {
     int16_t bestEval = 1000;    // -1000 if first node white; +1000 if first node black
                                 // basically, we give worst value so we can "filter" real value
@@ -34,16 +50,14 @@ int16_t search(Gameplay* _gameplay, Evaluation* evaluation, uint16_t depth)
 
     for (size_t i = 0; i < words_size; i++)
     {
-        _gameplay->current_word = realloc(_gameplay->current_word, sizeof(char) * strlen(possible_words[i]) + 1);
         strcpy(_gameplay->current_word, possible_words[i]);
 
-        int16_t eval = -search(_gameplay, evaluation, depth - 1);
+        int16_t eval = -search(_gameplay, best_word, depth - 1);
         bestEval = minimum(eval, bestEval);
 
         if (bestEval == eval)
         {
-            evaluation->bestWord = realloc(evaluation->bestWord, sizeof(char) * strlen(possible_words[i]) + 1);
-            strcpy(evaluation->bestWord, possible_words[i]);
+            strcpy(best_word, possible_words[i]);
         }
     }
 
@@ -51,29 +65,14 @@ int16_t search(Gameplay* _gameplay, Evaluation* evaluation, uint16_t depth)
     return bestEval;
 }
 
-char* computer_turn(struct gameplay_T* _gameplay, struct start_T* _start)
+void computer_turn(struct gameplay_T* _gameplay, char* word)
 {
-    char* word = malloc(sizeof(char) * 1);
+    char best_word[WORD_LIMIT + 1];     // +1 for '\0'
+    char original[WORD_LIMIT + 1];      // +1 for '\0'
 
-    char* original = malloc(sizeof(char) * strlen(_gameplay->current_word) + 1);
     strcpy(original, _gameplay->current_word);
+    search(_gameplay, best_word, _gameplay->depth);
 
-    Evaluation* evaluation = malloc(sizeof(Evaluation));
-
-    evaluation->bestWord = malloc(sizeof(char) * 1);
-    strcpy(evaluation->bestWord, "\0");
-
-    search(_gameplay, evaluation, _start->depth);
-
-    _gameplay->current_word = realloc(_gameplay->current_word, sizeof(char) * strlen(original) + 1);
     strcpy(_gameplay->current_word, original);
-
-    word = realloc(word, sizeof(char) * strlen(evaluation->bestWord) + 1);
-    strcpy(word, evaluation->bestWord);
-
-    free(evaluation->bestWord);
-    free(evaluation);
-
-    free(original);
-    return word;
+    strcpy(word, best_word);
 }

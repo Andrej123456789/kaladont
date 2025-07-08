@@ -1,34 +1,15 @@
+/**
+ * @author Andrej123456789 (Andrej Bartulin)
+ * PROJECT: kaladont
+ * LICENSE: MIT license
+ * DESCRIPTION: Program's logic
+ */
+
 #pragma once
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <time.h>
-
-#include "server.h"
-#include "utils.h"
-
-#include "computer.h"
 #include "c_vector.h"
 
-struct networkPlayer_T;
-
-/**
- * Struct containing gameplay informations
- * @param current_word current word
- * @param player id of current player
- * @param network_points vector containing points in multiplayer mode
- * @param timeline used words in current game
- * @param words list of all available words
-*/
-typedef struct gameplay_T
-{
-    char* current_word;
-    uint64_t player;
-    cvector_vector_type(struct networkPlayer_T*) network_points;
-    cvector_vector_type(char*) timeline;
-    cvector_vector_type(char*) words;
-} Gameplay;
+#define WORD_LIMIT 62
 
 /**
  * Struct containing network informations
@@ -42,52 +23,49 @@ typedef struct Network
 } Network;
 
 /**
- * Struct containing network player's informations
- * @param name player's name
- * @param points number of points
-*/
-typedef struct networkPlayer_T
-{
-    char* name;
-    uint64_t points;
-} NetworkPlayer;
-
-
-/**
- * Struct containing player's informationas
+ * Struct containing player's informations
  * @param points number of points
 */
 typedef struct Player
 {
+    char* name;
     uint64_t points;
 } Player;
 
 /**
- * Struct containing settings
- * @param kaladont_allowed is word `kaladont` allowed
- * @param players number of players
- * @param depth depth of search in computer player
- * @param sequence sequence containing human and computer players 
- * @param words_path path to words file
+ * Struct containing gameplay informations
+ * @param current_word current word
+ * @param player id of current player
+ * @param network_points vector containing points in multiplayer mode
+ * @param timeline used words in current game
+ * @param words list of all available words
 */
-typedef struct start_T
+typedef struct gameplay_T
 {
-    bool kaladont_allowed;
-    uint64_t players;
-    uint16_t depth;
+    Player* players;
+    uint16_t number_of_players;
+    char* players_sequence;
 
-    cvector_vector_type(char) sequence;
+    bool kaladont_allowed;
+    bool wait_for_correct_word;
+
+    char current_word[WORD_LIMIT + 1]; // +1 for '\0'
+    uint16_t current_player;
+
     cvector_vector_type(char*) words_path;
-} Start;
+    cvector_vector_type(char*) words;
+
+    uint16_t depth;
+} Gameplay;
 
 /* ------------------------------------ */
 
 /**
- * Sets a current player to next player
+ * Moves an increment for current player
  * @param _gameplay `Gameplay` struct
- * @param _start `Start` struct
+ * @return void
 */
-void next_player(Gameplay* _gameplay, Start* _start);
+void next_player(Gameplay* _gameplay);
 
 /**
  * Gets a random word from `words` list
@@ -97,22 +75,24 @@ void next_player(Gameplay* _gameplay, Start* _start);
 char* random_word(Gameplay* _gameplay);
 
 /**
- * Reads points from local players
- * @param players players list
- * @param num_players number of players in game
+ * Reads points from players
+ * @param players array of players
+ * @param num_players number of players in the game
+ * @return void
 */
-void read_points(Player players[], uint64_t num_players);
+void read_points(Player* players, uint16_t num_players);
 
 /**
- * Sets points to a local player
+ * Sets a point to a player
  * @param _gameplay `Gameplay` struct
- * @param players players list
+ * @return void
 */
-void set_point(Gameplay* _gameplay, Player players[]);
+void set_point(Gameplay* _gameplay);
 
 /**
  * Gets a random word from `random_word`, push back it to `timeline` and copies it to `current_word`
  * @param _gameplay `Gameplay` struct
+ * @return void
 */
 void set_random_word(Gameplay* _gameplay);
 
@@ -121,24 +101,14 @@ void set_random_word(Gameplay* _gameplay);
 /**
  * Unified gameplay mechanics
  * @param _gameplay `Gameplay` struct
- * @param np network players
  * @param input user input
- * @param network is multiplayer mode enabled
  * @return int [0 - no point, 1 - give a point to the player, 
  * -1 - game finished with a point, -2 - game finished without a point]
 */
-int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network);
+int gameplay(Gameplay* _gameplay, char* input);
 
 /**
- * Entry point for multiplayer gameplay
+ * Entry point for game logic
  * @param _gameplay `Gameplay` struct
- * @param _network `Network` struct
 */
-void network_gameplay(Gameplay* _gameplay, Network* _network);
-
-/**
- * Entry point for local gameplay
- * @param _gameplay `Gameplay` struct
- * @param _start `Start` struct
-*/
-void local_gameplay(Gameplay* _gameplay, Start* _start);
+void gameplay_entry(Gameplay* _gameplay);

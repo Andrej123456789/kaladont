@@ -17,7 +17,7 @@
 - [x] Settings
 - [x] Gameplay
   - [x] Local
-  - [x] Networking
+  - [ ] Networking
 - [ ] Computer
 
 ## Compile
@@ -31,11 +31,6 @@
 | gcc      | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install gcc`</td><td>`pacman -S gcc`</td></tr></table>                   |
 | json-c   | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install libjson-c-dev`</td><td>`sudo pacman -S json-c`</td></tr></table> |
 
-#### External stand-alone dependencies
-
-- [c-vector](https://github.com/eteran/c-vector)
-- [CString](https://github.com/C-STD/CString)
-
 ### Compiling & running
 
 | Number: | Step:                    | Command:                                                |
@@ -45,16 +40,33 @@
 | 3       | Compiling                | `make`                                                  |
 | 4       | Running the program      | `make run`                                              |
 
-## How to change settings?
+## settings.json
+```json
+{
+    "players": 4, // number of players
+    "players_sequence": "0010", // 0 - local player, 1 - computer player, 2 - network player
 
-- `kaladont_allowed` - is it allowed to say word `kaladont`
-- `players` - number of players
-- `words_path` - list of .txt files containing words
+    "kaladont_allowed": true, // is it allowed to say word `kaladont`
+    "wait_for_correct_word": false, // should we wait for player to say correct word
+
+    "words_path": ["settings/words.txt"], // paths to the text files containing words, every line contains one word
+
+    "computer": [{
+        "depth": 1 // depth of minmax search
+    }],
+
+    "network": [{
+        "enabled": false, // are network players enabled
+        "port": 5555 // server's port
+    }]
+}
+
+```
 
 ## Credits
 
-- [c-chatroom](https://github.com/lovenery/c-chatroom)
-- [Rječnik hrvatskih jezika](https://github.com/gigaly/rjecnik-hrvatskih-jezika)
-- [spisak-srpskih-reci](https://github.com/turanjanin/spisak-srpskih-reci)
 - [Algorithms Explained – minimax and alpha-beta pruning - Sebastian Lague](https://www.youtube.com/watch?v=l-hh51ncgDI)
 - [Coding Adventure: Chess - Sebastian Lague](https://www.youtube.com/watch?v=U4ogK0MIzqk)
+- [c-vector](https://github.com/eteran/c-vector)
+- [Rječnik hrvatskih jezika](https://github.com/gigaly/rjecnik-hrvatskih-jezika)
+- [spisak-srpskih-reci](https://github.com/turanjanin/spisak-srpskih-reci)

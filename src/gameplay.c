@@ -1,11 +1,26 @@
-#include "headers/gameplay.h"
+/**
+ * @author Andrej123456789 (Andrej Bartulin)
+ * PROJECT: kaladont
+ * LICENSE: MIT license
+ * DESCRIPTION: Program's logic
+ */
 
-void next_player(Gameplay* _gameplay, Start* _start)
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <time.h>
+
+#include "headers/c_vector.h"
+#include "headers/computer.h"
+#include "headers/gameplay.h"
+#include "headers/utils.h"
+
+void next_player(Gameplay* _gameplay)
 {
-    _gameplay->player += 1;
-    if (_gameplay->player >= _start->players)
+    _gameplay->current_player += 1;
+    if (_gameplay->current_player >= _gameplay->number_of_players)
     {
-        _gameplay->player = 0;
+        _gameplay->current_player = 0;
     }
 }
 
@@ -21,7 +36,7 @@ char* random_word(Gameplay* _gameplay)
     return _gameplay->words[pos];
 }
 
-void read_points(Player players[], uint64_t num_players)
+void read_points(Player* players, uint16_t num_players)
 {
     printf("Number of points of each player: \n");
     for (size_t i = 0; i < num_players; i++)
@@ -30,25 +45,21 @@ void read_points(Player players[], uint64_t num_players)
     }
 }
 
-void set_point(Gameplay* _gameplay, Player players[])
+void set_point(Gameplay* _gameplay)
 {
-    players[_gameplay->player].points += 1;
+    _gameplay->players[_gameplay->current_player].points += 1;
 }
 
 void set_random_word(Gameplay* _gameplay)
 {
     char* rand_word = random_word(_gameplay);
-
-    cvector_push_back(_gameplay->timeline, rand_word);
     strcpy(_gameplay->current_word, rand_word);
 }
 
 /* ------------------------------------ */
 
-int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
+int gameplay(Gameplay* _gameplay, char* input)
 {
-    char send_buffer[LENGTH_SEND];
-
     if (strcmp(input, "exit") == 0)
     {
         printf("Exiting...\n");
@@ -58,13 +69,6 @@ int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
     else if (strcmp(input, "next") == 0)
     {
         printf("You don't have a point!\n");
-
-        if (network)
-        {
-            sprintf(send_buffer, "%s don't have a point!\n", np->name);
-            send_to_all_clients(send_buffer);
-        }
-
         return 0;
     }
 
@@ -72,25 +76,19 @@ int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
                                                         && find_element(_gameplay->words, input)
                                                         && strlen(input) > 2)
     {
-        printf("You have one point!\n");
         erase_element(&_gameplay->words, input);
-
-        if (network)
-        {
-            sprintf(send_buffer, "%s have one point!\n", np->name);
-            send_to_all_clients(send_buffer);
-        }
 
         if (strcmp(get_last_N_characters(input, 2), "nt") == 0)
         {
+            if (strcmp(input, "kaladont") == 0 && _gameplay->kaladont_allowed == false)
+            {
+                printf("Game ended... \n");
+                return -2;
+            }
+
+            printf("You have one point!\n");
             printf("Game ended... \n");
 
-            if (network)
-            {
-                sprintf(send_buffer, "Game ended...\n");
-                send_to_all_clients(send_buffer);
-            }
-            
             return -1;
         }
 
@@ -99,112 +97,29 @@ int gameplay(Gameplay* _gameplay, ClientList* np, char* input, bool network)
     }
 
     printf("You don't have a point!\n");
-
-    if (network)
-    {
-        sprintf(send_buffer, "%s don't have a point!\n", np->name);
-        send_to_all_clients(send_buffer);
-    }
-
     return 0;
 }
 
-void network_gameplay(Gameplay* _gameplay, Network* _network)
-{
-    int server_sockfd = 0;
-    int client_sockfd = 0;
-
-    ClientList* now;
-
-    signal(SIGINT, catch_ctrl_c_and_exit);
-
-    /* Create socket */
-    server_sockfd = socket(AF_INET , SOCK_STREAM , 0);
-    if (server_sockfd == -1) 
-    {
-        printf("Fail to create a socket!\n");
-        return;
-    }
-
-    /* Socket information */
-    struct sockaddr_in server_info, client_info;
-    int s_addrlen = sizeof(server_info);
-    int c_addrlen = sizeof(client_info);
-    memset(&server_info, 0, s_addrlen);
-    memset(&client_info, 0, c_addrlen);
-    server_info.sin_family = PF_INET;
-    server_info.sin_addr.s_addr = INADDR_ANY;
-    server_info.sin_port = htons(_network->port);
-
-    /* Bind and listen */
-    bind(server_sockfd, (struct sockaddr *)&server_info, s_addrlen);
-    listen(server_sockfd, 5);
-
-    /* Gameplay stuff */
-    set_random_word(_gameplay);
-
-    /* Print server IP */
-    getsockname(server_sockfd, (struct sockaddr*) &server_info, (socklen_t*) &s_addrlen);
-    printf("Game started on: %s:%d!\n", inet_ntoa(server_info.sin_addr), ntohs(server_info.sin_port));
-    printf("Previous word is: %s\n\n", _gameplay->current_word);
-
-    /* Initial linked list for clients */
-    root = newNode(server_sockfd, inet_ntoa(server_info.sin_addr));
-    now = root;
-
-    while (1) 
-    {
-        client_sockfd = accept(server_sockfd, (struct sockaddr*) &client_info, (socklen_t*) &c_addrlen);
-
-        /* Print client IP */
-        getpeername(client_sockfd, (struct sockaddr*) &client_info, (socklen_t*) &c_addrlen);
-        printf("Client %s:%d joined the game!\n", inet_ntoa(client_info.sin_addr), ntohs(client_info.sin_port));
-
-        /* Append linked list for clients */
-        ClientList *c = newNode(client_sockfd, inet_ntoa(client_info.sin_addr));
-        c->prev = now;
-        now->link = c;
-        now = c;
-
-        ClientArg arguments;
-
-        arguments.now = now;
-        arguments.p_client = c;
-        arguments._gameplay = _gameplay;
-
-        pthread_t id;
-        if (pthread_create(&id, NULL, client_handler, (void *)&arguments) != 0) 
-        {
-            perror("Create pthread error!\n");
-            return;
-        }
-    }
-
-    return;
-}
-
-void local_gameplay(Gameplay* _gameplay, Start* _start)
+void gameplay_entry(Gameplay* _gameplay)
 {
     bool game_finished = false;
-    _gameplay->player = 0;
 
-    Player players[_start->players];
+    _gameplay->current_player = 0;
+    _gameplay->players = calloc(_gameplay->number_of_players, sizeof(Player));
+
     char user_input[WORD_LIMIT + 1];
-
-    for (size_t i = 0; i < _start->players; i++)
-    {
-        players[i].points = 0;
-    }
-
     set_random_word(_gameplay);
+
     while (!game_finished)
     {
-        if (_start->sequence[_gameplay->player] == '1')
+        if (_gameplay->players_sequence[_gameplay->current_player] == '1') // computer player
         {
-            char* computer_input = computer_turn(_gameplay, _start);
+            computer_turn(_gameplay, user_input);
+        }
 
-            strcpy(user_input, computer_input);
-            free(computer_input);
+        else if (_gameplay->players_sequence[_gameplay->current_player] == '2') // network player
+        {
+            
         }
 
         else
@@ -214,34 +129,36 @@ void local_gameplay(Gameplay* _gameplay, Start* _start)
 
             printf("Previous word is: %s\n", _gameplay->current_word);
 
-            printf("Player %lu: ", _gameplay->player);
+            printf("Player %u: ", _gameplay->current_player);
             scanf(custom_format, user_input);
         }
 
-        int result = gameplay(_gameplay, NULL, user_input, false);
-
-        if (result == -1)
+        int result = gameplay(_gameplay, user_input);
+        switch (result)
         {
-            set_point(_gameplay, players);
-            read_points(players, _start->players);
+            case 1:
+                set_point(_gameplay);
+                break;
 
-            game_finished = true;
-            break;
+            case -1:
+                set_point(_gameplay);
+                set_point(_gameplay); // last person gets one more point
+
+                read_points(_gameplay->players, _gameplay->number_of_players);
+                game_finished = true;
+
+                break;
+
+            case -2:
+                read_points(_gameplay->players, _gameplay->number_of_players);
+                game_finished = true;
+
+                break;
         }
 
-        else if (result == -2)
+        if (!(result == 0 && _gameplay->wait_for_correct_word == true))
         {
-            read_points(players, _start->players);
-
-            game_finished = true;
-            break;
+            next_player(_gameplay);
         }
-
-        else if (result == 1)
-        {
-            set_point(_gameplay, players);
-        }
-
-        next_player(_gameplay, _start);
     }
 }

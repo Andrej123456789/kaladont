@@ -1,13 +1,12 @@
+/**
+ * @author Andrej123456789 (Andrej Bartulin)
+ * PROJECT: kaladont
+ * LICENSE: MIT license
+ * DESCRIPTION: Helper functions
+ */
+
 #pragma once
 
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <stdbool.h>
-
-#include <ctype.h>
 #include "c_vector.h"
 
 /**

@@ -1,3 +1,18 @@
+/**
+ * @author Andrej123456789 (Andrej Bartulin)
+ * PROJECT: kaladont
+ * LICENSE: MIT license
+ * DESCRIPTION: Helper functions
+ */
+
+#include <ctype.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "headers/utils.h"
 
 void erase_element(cvector_vector_type(char*)* vec, char* str)
