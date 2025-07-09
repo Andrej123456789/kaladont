@@ -53,10 +53,11 @@ void cleanup(Gameplay* _gameplay)
 /**
  * Loads settings and list of words
  * @param _gameplay `Gameplay` struct
+ * @param _network `Network` struct
  * @param path path to the `.json` file
  * @return int
 */
-int start(Gameplay* _gameplay, char* path)
+int start(Gameplay* _gameplay, Network* _network, char* path)
 {
     /* Load JSON */
     struct json_object_iterator it;
@@ -167,16 +168,16 @@ int start(Gameplay* _gameplay, char* path)
             while (!json_object_iter_equal(&it2, &itEnd2))
             {
                 const char* key2 = json_object_iter_peek_name(&it2);
-                // json_object* val2 = json_object_iter_peek_value(&it2);
+                json_object* val2 = json_object_iter_peek_value(&it2);
 
                 if (strcmp(key2, "enabled") == 0)
                 {
-
+                    _network->enabled = json_object_get_boolean(val2);
                 }
 
                 else if (strcmp(key2, "port") == 0)
                 {
-
+                    _network->port = (uint16_t)json_object_get_int(val2);
                 }
 
                 json_object_iter_next(&it2);
@@ -222,6 +223,7 @@ int start(Gameplay* _gameplay, char* path)
 int main(int argc, char* argv[])
 {
     Gameplay* _gameplay = malloc(sizeof(Gameplay));
+    Network _network;
 
     _gameplay->players = NULL;
     _gameplay->players_sequence = NULL;
@@ -241,12 +243,12 @@ int main(int argc, char* argv[])
         path[256] = '\0';
     }
 
-    if (start(_gameplay, path) != 0)
+    if (start(_gameplay, &_network, path) != 0)
     {
         goto end;
     }
 
-    gameplay_entry(_gameplay);
+    gameplay_entry(_gameplay, &_network);
 
 end:
     cleanup(_gameplay);

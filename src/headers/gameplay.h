@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 #include "c_vector.h"
 
 #define WORD_LIMIT 62
@@ -110,5 +112,6 @@ int gameplay(Gameplay* _gameplay, char* input);
 /**
  * Entry point for game logic
  * @param _gameplay `Gameplay` struct
+ * @param _network `Network` struct
 */
-void gameplay_entry(Gameplay* _gameplay);
+void gameplay_entry(Gameplay* _gameplay, Network* _network);

@@ -14,7 +14,7 @@
  * @brief Erases element in c_vector
  * @param vec vector
  * @param str string (element)
- * @return cvector_vector_type
+ * @return void
 */
 void erase_element(cvector_vector_type(char*)* vec, char* str);
 
@@ -25,33 +25,36 @@ void erase_element(cvector_vector_type(char*)* vec, char* str);
  * @param str string (element)
  * @return bool
 */
-bool find_element(cvector_vector_type(char*) vec, char* str);
+bool find_element(cvector_vector_type(char*)* vec, char* str);
 
 /**
- * Get all words from words list starting on specified substring
+ * Gets all words starting with prefix from the words list
  * @param words words list
  * @param prefix substring
+ * @return cvector_vector_type(char*)
 */
-cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*) words, char* prefix);
+cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*)* words, char* prefix);
 
 /**
- * Get first N characters
+ * Gets first N characters
  * @param input string
- * @param N number of characters we are comparing
- * @return char*
+ * @param N number of characters
+ * @param buffer where result will be stored (buffer must have space for N+1 chars)
+ * @return void
 */
-char* get_first_N_characters(const char* input, int N);
+void get_first_N_characters(const char* str, int N, char* buffer);
 
 /**
  * Get last N characters
  * @param input string
  * @param N number of characters we are comparing
- * @return char*
+ * @param buffer where result will be stored (buffer must have space for N+1 chars)
+ * @return void
 */
-char* get_last_N_characters(const char* input, int N);
+void get_last_N_characters(const char* str, int N, char* buffer);
 
 /**
- * Find minimum number between a and b
+ * Finds minimum value between a and b
  * @param a first number
  * @param b second number
  * @return int16_t
@@ -59,7 +62,7 @@ char* get_last_N_characters(const char* input, int N);
 int16_t maximum(int16_t a, int16_t b);
 
 /**
- * Find maximum number between a and b
+ * Finds maximum value between a and b
  * @param a first number
  * @param b second number
  * @return int16_t
@@ -67,7 +70,7 @@ int16_t maximum(int16_t a, int16_t b);
 int16_t minimum(int16_t a, int16_t b);
 
 /**
- * Remove whitespace from string
+ * Removes whitespaces from a string
  * @param str string
  * @return char*
 */

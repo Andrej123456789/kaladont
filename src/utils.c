@@ -21,16 +21,19 @@ void erase_element(cvector_vector_type(char*)* vec, char* str)
     {
         if (strcmp(str, (*vec)[i]) == 0)
         {
+            free((*vec)[i]);
             cvector_erase(*vec, i);
+
+            break;
         }
     }
 }
 
-bool find_element(cvector_vector_type(char*) vec, char* str)
+bool find_element(cvector_vector_type(char*)* vec, char* str)
 {
-    for (size_t i = 0; i < cvector_size(vec); i++)
+    for (size_t i = 0; i < cvector_size(*vec); i++)
     {
-        if (strcmp(str, vec[i]) == 0)
+        if (strcmp(str, (*vec)[i]) == 0)
         {
             return true;
         }
@@ -39,57 +42,38 @@ bool find_element(cvector_vector_type(char*) vec, char* str)
     return false;
 }
 
-cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*) words, char* prefix)
+cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*)* words, char* prefix)
 {
     cvector_vector_type(char*) my_words = NULL;
 
-    for (size_t i = 0; i < cvector_size(words); i++)
+    for (size_t i = 0; i < cvector_size(*words); i++)
     {
-        if (strcmp(get_first_N_characters(words[i], 2), prefix) == 0)
+        char buffer[3];
+        get_first_N_characters((*words)[i], 2, buffer);
+ 
+        if (strcmp(buffer, prefix) == 0)
         {
-            cvector_push_back(my_words, words[i]);
+            cvector_push_back(my_words, (*words)[i]);
         }
     }
 
     return my_words;
 }
 
-char* get_first_N_characters(const char* input, int N)
+void get_first_N_characters(const char* str, int N, char* buffer) 
 {
-    char result[3];
-
-    if (N <= 0) 
-    {
-        result[0] = '\0';
-        return NULL;
-    }
-
-    strncpy(result, input, N);
-    result[N] = '\0';
-
-    return strdup(result);
+    int len = strlen(str);
+    if (N > len) N = len;
+    strncpy(buffer, str, N);
+    buffer[N] = '\0';
 }
 
-char* get_last_N_characters(const char* input, int N)
+void get_last_N_characters(const char* str, int N, char* buffer) 
 {
-    char result[3];
-
-    if (N <= 0) 
-    {
-        result[0] = '\0';
-        return NULL;
-    }
-
-    int length = strlen(input);
-    if (length < N) 
-    {
-        N = length;
-    }
-
-    strncpy(result, input + (length - N), N);
-    result[N] = '\0';
-
-    return strdup(result);
+    int len = strlen(str);
+    if (N > len) N = len;
+    strncpy(buffer, str + len - N, N);
+    buffer[N] = '\0';
 }
 
 int16_t maximum(int16_t a, int16_t b) 

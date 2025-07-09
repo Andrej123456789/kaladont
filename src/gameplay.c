@@ -5,7 +5,6 @@
  * DESCRIPTION: Program's logic
  */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
@@ -72,13 +71,20 @@ int gameplay(Gameplay* _gameplay, char* input)
         return 0;
     }
 
-    if (strcmp(get_first_N_characters(input, 2), get_last_N_characters(_gameplay->current_word, 2)) == 0 
-                                                        && find_element(_gameplay->words, input)
-                                                        && strlen(input) > 2)
+    char first_buffer[3];
+    char last_buffer[3];
+
+    get_first_N_characters(input, 2, first_buffer);
+    get_last_N_characters(_gameplay->current_word, 2, last_buffer);
+
+    if (strcmp(first_buffer, last_buffer) == 0 && 
+        find_element(&_gameplay->words, input)  && 
+        strlen(input) > 2)
     {
         erase_element(&_gameplay->words, input);
 
-        if (strcmp(get_last_N_characters(input, 2), "nt") == 0)
+        get_last_N_characters(input, 2, last_buffer);
+        if (strcmp(last_buffer, "nt") == 0)
         {
             if (strcmp(input, "kaladont") == 0 && _gameplay->kaladont_allowed == false)
             {
@@ -100,7 +106,7 @@ int gameplay(Gameplay* _gameplay, char* input)
     return 0;
 }
 
-void gameplay_entry(Gameplay* _gameplay)
+void gameplay_entry(Gameplay* _gameplay,Network* _network)
 {
     bool game_finished = false;
 
@@ -110,16 +116,22 @@ void gameplay_entry(Gameplay* _gameplay)
     char user_input[WORD_LIMIT + 1];
     set_random_word(_gameplay);
 
+    if (_network->enabled == true)
+    {
+        /* start a server */
+    }
+
     while (!game_finished)
     {
         if (_gameplay->players_sequence[_gameplay->current_player] == '1') // computer player
         {
             computer_turn(_gameplay, user_input);
+            printf("Player %d played: %s\n", _gameplay->current_player, user_input);
         }
 
         else if (_gameplay->players_sequence[_gameplay->current_player] == '2') // network player
         {
-            
+            /* receive a message from the server */
         }
 
         else

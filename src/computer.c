@@ -18,7 +18,13 @@
 
 int16_t evaluate_word(char* word)
 {
-    UNUSED(word);
+    char buffer[3];
+    get_last_N_characters(word, 2, buffer);
+
+    if (strcmp(buffer, "nt") == 0)
+    {
+        return -1000;
+    }
 
     int16_t combinations[11] = {-6, 3, -4, 1, 10, 1, 2, 3, 4, 5};
 
@@ -30,38 +36,100 @@ int16_t evaluate_word(char* word)
 
 int16_t search(Gameplay* _gameplay, char* best_word, uint16_t depth)
 {
-    int16_t bestEval = 1000;    // -1000 if first node white; +1000 if first node black
-                                // basically, we give worst value so we can "filter" real value
-
     if (depth == 0)
     {
         return evaluate_word(_gameplay->current_word);
     }
 
+    char buffer[3];
+    get_last_N_characters(_gameplay->current_word, 2, buffer);
+    
     cvector_vector_type(char*) possible_words = NULL;
-    possible_words = get_all_words_starting_on(_gameplay->words, get_last_N_characters(_gameplay->current_word, 2));
-
+    possible_words = get_all_words_starting_on(&_gameplay->words, buffer);
+    
     size_t words_size = cvector_size(possible_words);
     if (words_size == 0)
     {
         cvector_free(possible_words);
         return -1000;
     }
-
+    
+    int16_t bestEval = -1000; // basically, we give the worst value so we can "filter" out the best value for ourself
     for (size_t i = 0; i < words_size; i++)
     {
         strcpy(_gameplay->current_word, possible_words[i]);
 
         int16_t eval = -search(_gameplay, best_word, depth - 1);
-        bestEval = minimum(eval, bestEval);
+        bestEval = maximum(eval, bestEval);
 
-        if (bestEval == eval)
+        // we can select a word only for the next move, not later ones
+        if (bestEval == eval && depth == _gameplay->depth)
         {
             strcpy(best_word, possible_words[i]);
         }
     }
 
     cvector_free(possible_words);
+    return bestEval;
+}
+
+int16_t search_debug(Gameplay* _gameplay, char* best_word, uint16_t depth, uint16_t level)
+{
+    // Print current node
+    for (int i = 0; i < level; i++) printf("|  ");
+    printf("↳ %s (depth: %u)\n", _gameplay->current_word, depth);
+
+    if (depth == 0)
+    {
+        int16_t score = evaluate_word(_gameplay->current_word);
+
+        for (int i = 0; i < level + 1; i++) printf("|  ");
+        printf("Eval: %d\n", score);
+
+        return score;
+    }
+
+    char buffer[3];
+    get_last_N_characters(_gameplay->current_word, 2, buffer);
+
+    cvector_vector_type(char*) possible_words = NULL;
+    possible_words = get_all_words_starting_on(&_gameplay->words, buffer);
+
+    size_t words_size = cvector_size(possible_words);
+    if (words_size == 0)
+    {
+        for (int i = 0; i < level + 1; i++) printf("|  ");
+        printf("Dead end\n");
+
+        cvector_free(possible_words);
+        return -1000;
+    }
+
+    int16_t bestEval = -1000; // basically, we give the worst value so we can "filter" out the best value for ourself
+    for (size_t i = 0; i < words_size; i++)
+    {
+        strcpy(_gameplay->current_word, possible_words[i]);
+        int16_t eval = -search_debug(_gameplay, best_word, depth - 1, level + 1);
+
+        // Print child word and eval inline
+        for (int j = 0; j < level + 1; j++) printf("|  ");
+        printf("└─ %s → %d\n", possible_words[i], eval);
+
+        bestEval = maximum(eval, bestEval);
+
+        // we can select a word only for the next move, not later ones
+        if (bestEval == eval && depth == _gameplay->depth)
+        {
+            strcpy(best_word, possible_words[i]);
+        }
+    }
+
+    cvector_free(possible_words);
+
+    // Print best eval for this node
+    for (int i = 0; i < level; i++) printf("|  ");
+    printf("Best eval for \"%s\": %d\n", _gameplay->current_word, bestEval);
+
     return bestEval;
 }
 

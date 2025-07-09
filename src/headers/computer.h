@@ -22,13 +22,24 @@ struct gameplay_T;
 int16_t evaluate_word(char* word);
 
 /**
- * Searches for the best word, copies word into `evaluation` variable
+ * Searches for the best word, copies the result into `best_word` variable
  * @param _gameplay `Gameplay` struct
- * @param best_word current best word
+ * @param best_word variable where result is stored
  * @param depth current depth
  * @return int16_t
 */
 int16_t search(struct gameplay_T* _gameplay, char* best_word, uint16_t depth);
+
+/**
+ * Searches for the best word, copies the result into `best_word` variable,
+ * and prints the steps.
+ * @param _gameplay `Gameplay` struct
+ * @param best_word variable where result is stored
+ * @param depth current depth
+ * @param level current level
+ * @return int16_t
+*/
+int16_t search_debug(struct gameplay_T* _gameplay, char* best_word, uint16_t depth, uint16_t level);
 
 /**
  * Returns a word which computer played
