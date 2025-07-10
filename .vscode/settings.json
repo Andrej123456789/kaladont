@@ -20,6 +20,7 @@
         "computer.h": "c",
         "utils.h": "c",
         "algorithm": "c",
-        "server.h": "c"
+        "server.h": "c",
+        "stdarg.h": "c"
     }
 }

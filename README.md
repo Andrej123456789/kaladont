@@ -17,7 +17,7 @@
 - [x] Settings
 - [x] Gameplay
   - [x] Local
-  - [ ] Networking
+  - [x] Networking
 - [ ] Computer
 
 ## Compile
@@ -33,12 +33,14 @@
 
 ### Compiling & running
 
-| Number: | Step:                    | Command:                                                |
-| ------- | ------------------------ | ------------------------------------------------------- |
-| 1       | Cloning repository       | `git clone https://github.com/Andrej123456789/kaladont` |
-| 2       | Entering `src` directory | `cd kaladont/src`                                       |
-| 3       | Compiling                | `make`                                                  |
-| 4       | Running the program      | `make run`                                              |
+| Number: | Step:                        | Command:                                                |
+| ------- | ---------------------------- | ------------------------------------------------------- |
+| 1       | Clone a repository           | `git clone https://github.com/Andrej123456789/kaladont` |
+| 2       | Enter the `src` directory    | `cd kaladont/src`                                       |
+| 3       | Compile                      | `make`                                                  |
+| 4       | Run the program              | `make run`                                              |
+| 5       | Enter the `client` directory | `cd ../client`                                          |
+| 6       | Compile and run the client   | `gcc client.c -o client && ./client <ip> <port>`        |
 
 ## settings.json
 ```json

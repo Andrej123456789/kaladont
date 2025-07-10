@@ -25,24 +25,46 @@ typedef struct Network
 } Network;
 
 /**
+ * Struct containing player's network data
+ * @param sockfd socket number, <= 0 is free slot
+ * @param inbuf player's input, +1 is for '\0'
+ * @param ready did player send an input
+ */
+typedef struct NetworkPlayer {
+    int   sockfd;
+    char  inbuf[WORD_LIMIT + 1];
+    bool  ready;
+} NetworkPlayer;
+
+/**
  * Struct containing player's informations
  * @param points number of points
+ * @param network_player network data
 */
 typedef struct Player
 {
-    char* name;
     uint64_t points;
+    NetworkPlayer network_player;
 } Player;
 
 /**
  * Struct containing gameplay informations
+ * @param players array of struct `Player`
+ * @param number_of_players number of players in the game
+ * @param players_sequence type of players (0 - local, 1 - computer, 2 - network)
+ * 
+ * @param kaladont_allowed is it allowed to say word `kaladont`
+ * @param wait_for_correct_word should we wait for player to say valid word
+ * 
  * @param current_word current word
- * @param player id of current player
- * @param network_points vector containing points in multiplayer mode
- * @param timeline used words in current game
- * @param words list of all available words
+ * @param current_player number of current player, position in array `players`
+ * 
+ * @param words_path paths to the files containing files
+ * @param words cached words in memory
+ * 
+ * @param depth depth of minmax search
 */
-typedef struct gameplay_T
+typedef struct Gameplay
 {
     Player* players;
     uint16_t number_of_players;
@@ -78,11 +100,11 @@ char* random_word(Gameplay* _gameplay);
 
 /**
  * Reads points from players
- * @param players array of players
- * @param num_players number of players in the game
+ * @param _gameplay `Gameplay` struct
+ * @param _network `Network` struct
  * @return void
 */
-void read_points(Player* players, uint16_t num_players);
+void read_points(Gameplay* _gameplay, Network* _network);
 
 /**
  * Sets a point to a player
@@ -103,15 +125,17 @@ void set_random_word(Gameplay* _gameplay);
 /**
  * Unified gameplay mechanics
  * @param _gameplay `Gameplay` struct
+ * @param _network `Network` struct
  * @param input user input
  * @return int [0 - no point, 1 - give a point to the player, 
  * -1 - game finished with a point, -2 - game finished without a point]
 */
-int gameplay(Gameplay* _gameplay, char* input);
+int gameplay(Gameplay* _gameplay, Network* _network, char* input);
 
 /**
  * Entry point for game logic
  * @param _gameplay `Gameplay` struct
  * @param _network `Network` struct
+ * @return void
 */
 void gameplay_entry(Gameplay* _gameplay, Network* _network);

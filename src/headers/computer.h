@@ -7,7 +7,7 @@
 
 #pragma once
 
-struct gameplay_T;
+struct Gameplay;
 
 #define UNUSED(x) (void)(x)
 #define WORD_LIMIT 62
@@ -28,7 +28,7 @@ int16_t evaluate_word(char* word);
  * @param depth current depth
  * @return int16_t
 */
-int16_t search(struct gameplay_T* _gameplay, char* best_word, uint16_t depth);
+int16_t search(struct Gameplay* _gameplay, char* best_word, uint16_t depth);
 
 /**
  * Searches for the best word, copies the result into `best_word` variable,
@@ -39,7 +39,7 @@ int16_t search(struct gameplay_T* _gameplay, char* best_word, uint16_t depth);
  * @param level current level
  * @return int16_t
 */
-int16_t search_debug(struct gameplay_T* _gameplay, char* best_word, uint16_t depth, uint16_t level);
+int16_t search_debug(struct Gameplay* _gameplay, char* best_word, uint16_t depth, uint16_t level);
 
 /**
  * Returns a word which computer played
@@ -47,4 +47,4 @@ int16_t search_debug(struct gameplay_T* _gameplay, char* best_word, uint16_t dep
  * @param word variable where computer's word will be stored
  * @return void
 */
-void computer_turn(struct gameplay_T* _gameplay, char* word);
+void computer_turn(struct Gameplay* _gameplay, char* word);

@@ -133,7 +133,7 @@ int16_t search_debug(Gameplay* _gameplay, char* best_word, uint16_t depth, uint1
     return bestEval;
 }
 
-void computer_turn(struct gameplay_T* _gameplay, char* word)
+void computer_turn(Gameplay* _gameplay, char* word)
 {
     char best_word[WORD_LIMIT + 1];     // +1 for '\0'
     char original[WORD_LIMIT + 1];      // +1 for '\0'
