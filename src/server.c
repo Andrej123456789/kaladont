@@ -85,8 +85,8 @@ void net_accept_clients(int listener_fd, Gameplay* g)
 
         if (i == g->number_of_players)
         {
-            const char* msg = "Server is full.\n";
-            send(c, msg, strlen(msg), 0);  close(c);  continue;
+            const char msg[] = "Server is full.\n";
+            send(c, msg, sizeof(msg), 0);  close(c);  continue;
         }
 
         NetworkPlayer *np = &g->players[i].network_player;
@@ -172,7 +172,7 @@ void broadcast(Gameplay* g, const char* fmt, ...)
         /* duplicate va_list for each send */
         va_copy(ap2, ap1);
         char buf[WORD_LIMIT+1];
-        int n = vsnprintf(buf, sizeof buf, fmt, ap2);
+        int n = vsnprintf(buf, sizeof(buf), fmt, ap2);
         va_end(ap2);
         if (n > 0) send(s, buf, (size_t)n, 0);
     }
