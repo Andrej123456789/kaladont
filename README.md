@@ -4,12 +4,13 @@
 
 ## Rules
 
-- Players say a word which begins with the last two letters of previous word.
-  - word must have at least `3` letters
-  - word cannot be made-up
-  - previous word cannot be repeated
-  - names are not allowed
-- Winner is who says a word ending on `nt`
+- Players say a word which begins with the last two letters of a previous word.
+- The word:
+  - must have at least `3` letters,
+  - cannot be made-up,
+  - cannot be repeated,
+  - and must not be a name.
+- Winner is who says a word ending on `nt`,
   - in some house rules, you are not allowed to say word `kaladont`; however, house rules are possible to modify in `settings.json`
 
 ## TODO
@@ -17,8 +18,8 @@
 - [x] Settings
 - [x] Gameplay
   - [x] Local
-  - [x] Networking
-- [ ] Computer
+  - [x] Network
+- [x] Computer
 
 ## Compile
 
@@ -45,8 +46,8 @@
 ## settings.json
 ```json
 {
-    "players": 4, // number of players
-    "players_sequence": "0010", // 0 - local player, 1 - computer player, 2 - network player
+    "players": 2, // number of players
+    "players_sequence": "00", // 0 - local player, 1 - computer player, 2 - network player
 
     "kaladont_allowed": true, // is it allowed to say word `kaladont`
     "wait_for_correct_word": false, // should we wait for player to say correct word
