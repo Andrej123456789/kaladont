@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/src/executable/kaladont",
-            "args": [],
+            "args": ["settings/settings.json"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/src",
             "environment": [],

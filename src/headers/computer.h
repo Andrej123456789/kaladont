@@ -15,14 +15,17 @@ struct Gameplay;
 /* ------------------------------------ */
 
 /**
- * Evaluates a word
+ * ### BROKEN! NOT IMPLEMENTED BECAUSE KALADONT IS NOT
+ * TWO-PLAYER ZERO-SUM GAME
+ * @brief Evaluates a word
  * @param word word to be evaluated
  * @return int16_t
 */
 int16_t evaluate_word(char* word);
 
 /**
- * Searches for the best word, copies the result into `best_word` variable
+ * ### BROKEN! YOU CANNOT USE NEGAMAX ON N-PLAYER NON-ZERO GAME
+ * @brief Searches for the best word, copies the result into `best_word` variable
  * @param _gameplay `Gameplay` struct
  * @param best_word variable where result is stored
  * @param depth current depth
@@ -31,7 +34,8 @@ int16_t evaluate_word(char* word);
 int16_t search(struct Gameplay* _gameplay, char* best_word, uint16_t depth);
 
 /**
- * Searches for the best word, copies the result into `best_word` variable,
+ * ### BROKEN! YOU CANNOT USE NEGAMAX ON N-PLAYER NON-ZERO GAME
+ * @brief Searches for the best word, copies the result into `best_word` variable,
  * and prints the steps.
  * @param _gameplay `Gameplay` struct
  * @param best_word variable where result is stored

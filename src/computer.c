@@ -140,17 +140,41 @@ int16_t search_debug(Gameplay* _gameplay, char* best_word, uint16_t depth, uint1
 
 void computer_turn(Gameplay* _gameplay, char* word)
 {
-    char best_word[WORD_LIMIT + 1];     // +1 for '\0'
-    char original[WORD_LIMIT + 1];      // +1 for '\0'
+    char buffer[3];
+    get_last_N_characters(_gameplay->current_word, 2, buffer);
 
-    strncpy(original, _gameplay->current_word, WORD_LIMIT);
-    original[WORD_LIMIT] = '\0';
+    cvector_vector_type(char*) possible_words = NULL;
+    possible_words = get_all_words_starting_on(&_gameplay->words, buffer);
 
-    search(_gameplay, best_word, _gameplay->depth);
+    size_t length = cvector_size(possible_words);
+    if (length == 0)
+    {
+        strcpy(word, "<error>");
+        return;
+    }
 
-    strncpy(_gameplay->current_word, original, WORD_LIMIT);
-    _gameplay->current_word[WORD_LIMIT] = '\0';
+    bool found = false;
+    for (size_t i = 0; i < length; i++)
+    {
+        buffer[0] = '\0';
+        get_last_N_characters(possible_words[i], 2, buffer);
 
-    strncpy(word, best_word, WORD_LIMIT);
-    word[WORD_LIMIT] = '\0';
+        if (strcmp(buffer, "nt") == 0)
+        {
+            strncpy(word, possible_words[i], WORD_LIMIT);
+            word[WORD_LIMIT] = '\0';
+
+            found = true;
+            break;
+        }
+    }
+
+    if (found == false)
+    {
+        /* Didn't found a word which ends on nt, return something */
+        strncpy(word, possible_words[0], WORD_LIMIT);
+        word[WORD_LIMIT] = '\0';
+    }
+
+    cvector_free(possible_words);
 }

@@ -92,7 +92,16 @@ int start(Gameplay* _gameplay, Network* _network, char* path)
                 return 1;
             }
 
-            _gameplay->players_sequence = malloc(_gameplay->number_of_players * sizeof(char));
+            _gameplay->players_sequence = malloc(
+                (_gameplay->number_of_players + 1) * sizeof(char)
+            ); // +1 for '\0'
+
+            if (_gameplay->players_sequence == NULL)
+            {
+                printf("Error during memory allocation!\nExiting...\n");
+                return 1;
+            }
+
             strcpy(_gameplay->players_sequence, json_object_get_string(val));
         }
 
@@ -207,11 +216,23 @@ int start(Gameplay* _gameplay, Network* _network, char* path)
 
         while (fgets(buffer, sizeof(buffer), file))
         {
-            buffer[strcspn(buffer, "\n")] = '\0'; /* remove \n */
+            buffer[strcspn(buffer, "\n")] = '\0'; // remove \n
+
+            if (strlen(buffer) < 3) // skip invalid words
+            {
+                continue;
+            }
+
             cvector_push_back(_gameplay->words, strdup(buffer));
         }
 
         fclose(file);
+    }
+
+    if (cvector_size(_gameplay->words) == 0)
+    {
+        printf("No words are in the list!\nExiting...\n");
+        return 1;
     }
 
     return 0;
@@ -223,6 +244,12 @@ int start(Gameplay* _gameplay, Network* _network, char* path)
 int main(int argc, char* argv[])
 {
     Gameplay* _gameplay = malloc(sizeof(Gameplay));
+    if (_gameplay == NULL)
+    {
+        printf("Error during memory allocation!\nExiting...\n");
+        return 0;
+    }
+
     Network _network;
 
     _gameplay->players = NULL;

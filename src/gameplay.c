@@ -27,13 +27,15 @@ void next_player(Gameplay* _gameplay)
 
 char* random_word(Gameplay* _gameplay)
 {
-    /* Seed the random number generator with the current time */
     srand(time(0));
 
-    /* Get random vector position */
-    size_t pos = (rand() % (cvector_size(_gameplay->words) - 0 + 1)) + 0;
+    size_t size = cvector_size(_gameplay->words);
+    if (size == 0)
+    {
+        return "<error>";
+    }
 
-    /* Return string at selected position */
+    size_t pos = rand() % size;
     return _gameplay->words[pos];
 }
 
@@ -64,6 +66,8 @@ void set_random_word(Gameplay* _gameplay)
 
     strncpy(_gameplay->current_word, rand_word, WORD_LIMIT);
     _gameplay->current_word[WORD_LIMIT] = '\0';
+
+    erase_element(&_gameplay->words, rand_word);
 }
 
 /* ------------------------------------ */
@@ -149,6 +153,12 @@ void gameplay_entry(Gameplay* _gameplay,Network* _network)
     _gameplay->current_player = 0;
     _gameplay->players = calloc(_gameplay->number_of_players, sizeof(Player));
 
+    if (_gameplay->players == NULL)
+    {
+        printf("Error during memory allocation!\nExiting...\n");
+        return;
+    }
+
     char user_input[WORD_LIMIT + 1];
     set_random_word(_gameplay);
 
@@ -196,6 +206,15 @@ void gameplay_entry(Gameplay* _gameplay,Network* _network)
         {
             net_accept_clients(listener_fd, _gameplay);
             net_poll_clients(_gameplay);
+        }
+
+        if (cvector_size(_gameplay->words) == 0)
+        {
+            printf("No words left!\nExiting...\n");
+            if (_network->enabled) { broadcast(_gameplay, "No words left!\nExiting...\n"); }
+
+            read_points(_gameplay, _network);
+            game_finished = true;
         }
 
         printf("Previous word is: %s\n", _gameplay->current_word);

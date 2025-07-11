@@ -21,6 +21,7 @@
         "utils.h": "c",
         "algorithm": "c",
         "server.h": "c",
-        "stdarg.h": "c"
+        "stdarg.h": "c",
+        "stddef.h": "c"
     }
 }
