@@ -61,7 +61,9 @@ void set_point(Gameplay* _gameplay)
 void set_random_word(Gameplay* _gameplay)
 {
     char* rand_word = random_word(_gameplay);
-    strcpy(_gameplay->current_word, rand_word);
+
+    strncpy(_gameplay->current_word, rand_word, WORD_LIMIT);
+    _gameplay->current_word[WORD_LIMIT] = '\0';
 }
 
 /* ------------------------------------ */
@@ -119,7 +121,8 @@ int gameplay(Gameplay* _gameplay, Network* _network, char* input)
             return -1;
         }
 
-        strcpy(_gameplay->current_word, input);
+        strncpy(_gameplay->current_word, input, WORD_LIMIT);
+        _gameplay->current_word[WORD_LIMIT] = '\0';
 
         printf("Player %u received a point!\n", _gameplay->current_player);
         if (_network->enabled)
@@ -225,7 +228,8 @@ void gameplay_entry(Gameplay* _gameplay,Network* _network)
 
                 if (np->ready)
                 {
-                    strcpy(user_input, np->inbuf);
+                    strncpy(user_input, np->inbuf, WORD_LIMIT);
+                    user_input[WORD_LIMIT] = '\0';
                 }
 
                 else

@@ -57,7 +57,8 @@ int16_t search(Gameplay* _gameplay, char* best_word, uint16_t depth)
     int16_t bestEval = -1000; // basically, we give the worst value so we can "filter" out the best value for ourself
     for (size_t i = 0; i < words_size; i++)
     {
-        strcpy(_gameplay->current_word, possible_words[i]);
+        strncpy(_gameplay->current_word, possible_words[i], WORD_LIMIT);
+        _gameplay->current_word[WORD_LIMIT] = '\0';
 
         int16_t eval = -search(_gameplay, best_word, depth - 1);
         bestEval = maximum(eval, bestEval);
@@ -65,7 +66,8 @@ int16_t search(Gameplay* _gameplay, char* best_word, uint16_t depth)
         // we can select a word only for the next move, not later ones
         if (bestEval == eval && depth == _gameplay->depth)
         {
-            strcpy(best_word, possible_words[i]);
+            strncpy(best_word, possible_words[i], WORD_LIMIT);
+            best_word[WORD_LIMIT] = '\0';
         }
     }
 
@@ -108,7 +110,9 @@ int16_t search_debug(Gameplay* _gameplay, char* best_word, uint16_t depth, uint1
     int16_t bestEval = -1000; // basically, we give the worst value so we can "filter" out the best value for ourself
     for (size_t i = 0; i < words_size; i++)
     {
-        strcpy(_gameplay->current_word, possible_words[i]);
+        strncpy(_gameplay->current_word, possible_words[i], WORD_LIMIT);
+        _gameplay->current_word[WORD_LIMIT] = '\0';
+
         int16_t eval = -search_debug(_gameplay, best_word, depth - 1, level + 1);
 
         // Print child word and eval inline
@@ -120,7 +124,8 @@ int16_t search_debug(Gameplay* _gameplay, char* best_word, uint16_t depth, uint1
         // we can select a word only for the next move, not later ones
         if (bestEval == eval && depth == _gameplay->depth)
         {
-            strcpy(best_word, possible_words[i]);
+            strncpy(best_word, possible_words[i], WORD_LIMIT);
+            best_word[WORD_LIMIT] = '\0';
         }
     }
 
@@ -138,9 +143,14 @@ void computer_turn(Gameplay* _gameplay, char* word)
     char best_word[WORD_LIMIT + 1];     // +1 for '\0'
     char original[WORD_LIMIT + 1];      // +1 for '\0'
 
-    strcpy(original, _gameplay->current_word);
+    strncpy(original, _gameplay->current_word, WORD_LIMIT);
+    original[WORD_LIMIT] = '\0';
+
     search(_gameplay, best_word, _gameplay->depth);
 
-    strcpy(_gameplay->current_word, original);
-    strcpy(word, best_word);
+    strncpy(_gameplay->current_word, original, WORD_LIMIT);
+    _gameplay->current_word[WORD_LIMIT] = '\0';
+
+    strncpy(word, best_word, WORD_LIMIT);
+    word[WORD_LIMIT] = '\0';
 }
