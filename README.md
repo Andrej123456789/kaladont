@@ -2,6 +2,8 @@
 
 [Kaladont](https://en.wikipedia.org/wiki/Kaladont) is a South Slavic word game popular in BiH, Croatia, Montenegro, North Macedonia, Serbia and Slovenia.
 
+[v1.0.0](https://github.com/Andrej123456789/kaladont/releases/tag/v1.0.0)
+
 ## Rules
 
 - Players say a word which begins with the last two letters of a previous word.
