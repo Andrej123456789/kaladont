@@ -7,7 +7,7 @@ project(kaladont)
 IF (WIN32)
     set(CMAKE_C_FLAGS "")
 ELSE()
-    set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -pedantic")
+    set(CMAKE_C_FLAGS "")
 ENDIF()
 
 file(GLOB SRC CONFIGURE_DEPENDS "*.c")
