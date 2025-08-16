@@ -49,7 +49,7 @@
 | 5       | Enter the `client` directory | `cd ../client`                                                     |
 | 6       | Compile and run the client   | `gcc client_posix.c -o client_posix && ./client_posix <ip> <port>` |
 
-**Notice for Windows users! Install x64 static version of `json-c` from vcpkg and run CMake with the following argument: `DVCPKG_ROOT="path_to_vcpkg"`.**
+**Notice for Windows users! Install x64 static version of `json-c` from vcpkg and run CMake with the following argument: `-DVCPKG_ROOT="path_to_vcpkg"`.**
 
 **Notice for Windows users! Enter `Developer Command Prompt` and run the following command to compile and run the client: `cl client_windows.c && ./client_windows <ip> <port>`.**
 
