@@ -272,6 +272,7 @@ int main(int argc, char* argv[])
 
     if (start(_gameplay, &_network, path) != 0)
     {
+        printf("Error has occurred!\nExiting...\n");
         goto end;
     }
 
