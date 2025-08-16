@@ -14,7 +14,7 @@
   - cannot be made-up,
   - cannot be repeated,
   - and must not be a name.
-- Winner is who says a word ending on `nt`,
+- Winner is a player who says a word ending on `nt`,
   - in some house rules, you are not allowed to say word `kaladont`; however, house rules are possible to modify in `settings.json`
 
 ## TODO
