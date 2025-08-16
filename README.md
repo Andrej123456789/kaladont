@@ -4,6 +4,8 @@
 
 [v1.0.0](https://github.com/Andrej123456789/kaladont/releases/tag/v1.0.0)
 
+[v2.0.0](https://github.com/Andrej123456789/kaladont/releases/tag/v2.0.0)
+
 ## Rules
 
 - Players say a word which begins with the last two letters of a previous word.
