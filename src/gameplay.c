@@ -8,7 +8,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
-#include <unistd.h>
+
+#if defined _WIN32 || defined _WIN64
+    #include <Windows.h>
+#else
+    #include <unistd.h>
+#endif
 
 #include "headers/c_vector.h"
 #include "headers/computer.h"
@@ -242,7 +247,12 @@ void gameplay_entry(Gameplay* _gameplay,Network* _network)
                 while (!np->ready && !game_finished && time(NULL) < deadline)
                 {
                     net_poll_clients(_gameplay);   /* non‑blocking socket pump  */
-                    usleep(POLL_SLEEP_US);         /* nap to save CPU */
+
+                    #if defined _WIN32 || defined _WIN64
+                        Sleep(POLL_SLEEP_US / 100);    /* nap to save CPU */
+                    #else
+                        usleep(POLL_SLEEP_US);         /* nap to save CPU */
+                    #endif
                 }
 
                 if (np->ready)

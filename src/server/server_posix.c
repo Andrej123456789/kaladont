@@ -18,8 +18,8 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "headers/server.h"
-#include "headers/gameplay.h"
+#include "../headers/server.h"
+#include "../headers/gameplay.h"
 
 /**
  * Enables non-blocking mode on a file descriptor.

@@ -257,7 +257,7 @@ int main(int argc, char* argv[])
     _gameplay->words_path = NULL;
     _gameplay->words = NULL;
 
-    char path[256];
+    char path[257];
     if (argc < 2)
     {
         printf("Enter the path: ");

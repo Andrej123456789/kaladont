@@ -22,6 +22,7 @@
         "algorithm": "c",
         "server.h": "c",
         "stdarg.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "socket.h": "c"
     }
 }
