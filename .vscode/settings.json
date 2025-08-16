@@ -23,6 +23,7 @@
         "server.h": "c",
         "stdarg.h": "c",
         "stddef.h": "c",
-        "socket.h": "c"
+        "socket.h": "c",
+        "select.h": "c"
     }
 }

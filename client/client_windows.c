@@ -21,7 +21,7 @@
 
 /**
  * Set non-blocking mode for socket
- * @param s socket struct
+ * @param s SOCKET
  */
 static int set_nonblocking(SOCKET s)
 {

@@ -2,7 +2,7 @@
  * @author Andrej123456789 (Andrej Bartulin)
  * PROJECT: kaladont
  * LICENSE: MIT license
- * DESCRIPTION: Server code
+ * DESCRIPTION: Server code (POSIX)
  */
 
 #include <stdarg.h>

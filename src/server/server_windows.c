@@ -1,8 +1,8 @@
 /**
- * @author Andrej...
+ * @author Andrej123456789 (Andrej Bartulin)
  * PROJECT: kaladont
- * LICENSE: MIT
- * DESCRIPTION: Windows Server code
+ * LICENSE: MIT license
+ * DESCRIPTION: Server code (Windows)
  */
 
 #include <stdarg.h>
