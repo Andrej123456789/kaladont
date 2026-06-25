@@ -11,7 +11,7 @@
 
 #include "c_vector.h"
 
-#define WORD_LIMIT 62
+#define WORD_LIMIT 63
 
 /**
  * Struct containing network informations

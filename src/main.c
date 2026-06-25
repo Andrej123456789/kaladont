@@ -257,7 +257,7 @@ int main(int argc, char* argv[])
     _gameplay->words_path = NULL;
     _gameplay->words = NULL;
 
-    char path[257];
+    char path[256];
     if (argc < 2)
     {
         printf("Enter the path: ");
@@ -267,7 +267,7 @@ int main(int argc, char* argv[])
     else
     {
         strncpy(path, argv[1], 255);
-        path[256] = '\0';
+        path[255] = '\0';
     }
 
     if (start(_gameplay, &_network, path) != 0)
