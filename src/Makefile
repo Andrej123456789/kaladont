@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pedantic -g
+CFLAGS = -Wall -Wextra -Werror -pedantic
 LDFLAGS = -ljson-c
 
 OBJDIR = objects
@@ -30,4 +30,4 @@ run:
 	@./$(BIN)
 
 clean:
-	rm -rf $(OBJECTS) $(BINFOLDER)
+	rm -rf $(OBJDIR) $(BINFOLDER)

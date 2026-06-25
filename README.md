@@ -2,10 +2,6 @@
 
 [Kaladont](https://en.wikipedia.org/wiki/Kaladont) is a South Slavic word game popular in BiH, Croatia, Montenegro, North Macedonia, Serbia and Slovenia.
 
-[v1.0.0](https://github.com/Andrej123456789/kaladont/releases/tag/v1.0.0)
-
-[v2.0.0](https://github.com/Andrej123456789/kaladont/releases/tag/v2.0.0)
-
 ## Rules
 
 - Players say a word which begins with the last two letters of a previous word.
@@ -27,18 +23,42 @@
 
 ## Compile
 
-### Installing dependencies
+## Installing dependencies
 
-| Package: | Command:                                                                                                                                |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| git      | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install git`</td><td>`pacman -S git`</td></tr></table>                   |
-| make     | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install make`</td><td>`pacman -S make`</td></tr></table>                 |
-| gcc      | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install gcc`</td><td>`pacman -S gcc`</td></tr></table>                   |
-| json-c   | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install libjson-c-dev`</td><td>`sudo pacman -S json-c`</td></tr></table> |
+### Windows
 
-**Notice for Windows users! You only need to install CMake and Visual Studio with C/C++ development extension!**
+- Git
+- Visual Studio with C/C++ development extension
+- CMake
+- json-c (x64 static version from vcpkg)
 
-### Compiling & running
+### Linux
+
+| Package: | Command:                                                                                                                           |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| git      | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install git`</td><td>`pacman -S git`</td></tr></table>              |
+| make     | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install make`</td><td>`pacman -S make`</td></tr></table>            |
+| gcc      | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install gcc`</td><td>`pacman -S gcc`</td></tr></table>              |
+| json-c   | <table><tr><th>Debian</th><th>Arch Linux</th></tr><td>`apt-get install libjson-c-dev`</td><td>`pacman -S json-c`</td></tr></table> |
+
+## Compiling & running
+
+### Windows
+
+| Number: | Step:                                                             | Command:                                                |
+| ------- | ----------------------------------------------------------------- | ------------------------------------------------------- |
+| 1       | Clone a repository                                                | `git clone https://github.com/Andrej123456789/kaladont` |
+| 2       | Enter the `src` directory                                         | `cd kaladont\src`                                       |
+| 3       | Create the `build` directory and enter it                         | `mkdir build && cd build`                               |
+| 4       | Run CMake                                                         | `cmake .. -DVCPKG_ROOT="path_to_vcpkg"`                 |
+| 5       | Open Visual Studio and build the solution                         |                                                         |
+| 6       | Run the program located inside the `Debug` or `Release` folder    | `.\Debug\kaladont.exe` or `.\Release\kaladont.exe`      |
+| 7       | Enter `Developer Command Prompt` and enter the `client` directory | `cd path_to_client_directory`                           |
+| 8       | Compile and run the client                                        | `cl client_windows.c && .\client_windows <ip> <port>`   |
+
+**Notice! In order not to use Visual Studio (you still need to have it installed), you can use nmake. Run CMake with following command: `cmake -G "NMake Makefiles" -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DVCPKG_ROOT="path_to_vcpkg" ..`. To compile the project use command `nmake`. You need to be inside *Developer Command Prompt* or *Developer Powershell*.**
+
+### Linux
 
 | Number: | Step:                        | Command:                                                           |
 | ------- | ---------------------------- | ------------------------------------------------------------------ |
@@ -49,29 +69,30 @@
 | 5       | Enter the `client` directory | `cd ../client`                                                     |
 | 6       | Compile and run the client   | `gcc client_posix.c -o client_posix && ./client_posix <ip> <port>` |
 
-**Notice for Windows users! Install x64 static version of `json-c` from vcpkg and run CMake with the following argument: `-DVCPKG_ROOT="path_to_vcpkg"`.**
-
-**Notice for Windows users! Enter `Developer Command Prompt` and run the following command to compile and run the client: `cl client_windows.c && ./client_windows <ip> <port>`.**
-
 ## settings.json
+
 ```json
 {
-    "players": 2, // number of players
-    "players_sequence": "00", // 0 - local player, 1 - computer player, 2 - network player
+  "players": 2, // number of players
+  "players_sequence": "00", // 0 - local player, 1 - computer player, 2 - network player
 
-    "kaladont_allowed": true, // is it allowed to say word `kaladont`
-    "wait_for_correct_word": false, // should we wait for player to say correct word
+  "kaladont_allowed": true, // is it allowed to say word `kaladont`
+  "wait_for_correct_word": false, // should we wait for player to say correct word
 
-    "words_path": ["settings/words.txt"], // paths to the text files containing words, every line contains one word
+  "words_path": ["settings/words.txt"], // paths to the text files containing words, every line contains one word
 
-    "computer": [{
-        "depth": 1 // depth of minmax search
-    }],
+  "computer": [
+    {
+      "depth": 1 // depth of minmax search
+    }
+  ],
 
-    "network": [{
-        "enabled": false, // are network players enabled
-        "port": 5555 // server's port
-    }]
+  "network": [
+    {
+      "enabled": false, // are network players enabled
+      "port": 5555 // server's port
+    }
+  ]
 }
 ```
 
