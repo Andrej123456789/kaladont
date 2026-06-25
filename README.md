@@ -56,7 +56,7 @@
 | 7       | Enter `Developer Command Prompt` and enter the `client` directory | `cd path_to_client_directory`                           |
 | 8       | Compile and run the client                                        | `cl client_windows.c && .\client_windows <ip> <port>`   |
 
-**Notice! In order not to use Visual Studio (you still need to have it installed), you can use nmake. Run CMake with following command: `cmake -G "NMake Makefiles" -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DVCPKG_ROOT="path_to_vcpkg" ..`. To compile the project use command `nmake`. You need to be inside *Developer Command Prompt* or *Developer Powershell*.**
+**Notice! In order not to use Visual Studio (you still need to have it installed), you can use nmake. Run CMake with following command: `cmake -G "NMake Makefiles" -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DVCPKG_ROOT="path_to_vcpkg" ..`. To compile the project use command `nmake`. You need to be inside _Developer Command Prompt_ or _Developer Powershell_.**
 
 ### Linux
 

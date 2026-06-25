@@ -20,7 +20,7 @@
 #define BUF (WORD_SIZE + 1)
 
 /**
- * Set non-blocking mode for socket
+ * Sets non-blocking mode for socket
  * @param s SOCKET
  */
 static int set_nonblocking(SOCKET s)
@@ -29,6 +29,9 @@ static int set_nonblocking(SOCKET s)
     return ioctlsocket(s, FIONBIO, &mode);
 }
 
+/**
+ * Entry point for the client
+ */
 int main(int argc, char *argv[])
 {
     if (argc != 3)

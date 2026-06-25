@@ -30,6 +30,9 @@ static int set_nonblocking(int fd)
     return (fl < 0) ? -1 : fcntl(fd, F_SETFL, fl | O_NONBLOCK);
 }
 
+/**
+ * Entry point for the client
+ */
 int main(int argc, char *argv[])
 {
     if (argc != 3)

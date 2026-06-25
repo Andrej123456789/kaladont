@@ -14,7 +14,7 @@ struct Gameplay;
 struct Player;
 
 /**
- * Start a server
+ * Starts a server
  * @param port port number
  * @param max_players maximum number of players server can receive
  * @return int
@@ -22,7 +22,7 @@ struct Player;
 int net_start_server(uint16_t port, uint16_t max_players);
 
 /**
- * Accept a client's connection to the server
+ * Accepts a client's connection to the server
  * @param listener_fd file descriptor
  * @param g `Gameplay` struct
  * @return void
@@ -30,14 +30,14 @@ int net_start_server(uint16_t port, uint16_t max_players);
 void net_accept_clients(int listener_fd, struct Gameplay* g);
 
 /**
- * Poll input from clients
+ * Polls input from clients
  * @param g `Gameplay` struct
  * @return void
  */
 void net_poll_clients(struct Gameplay* g);
 
 /**
- * Send a message to one player
+ * Sends a message to one player
  * @param p player
  * @param fmt message
  * @return void
@@ -45,7 +45,7 @@ void net_poll_clients(struct Gameplay* g);
 void send_to_player(struct Player* p, const char* fmt, ...);
 
 /**
- * Send a message to all players
+ * Sends a message to all players
  * @param g `Gameplay` struct
  * @param fmt message
  * @param void

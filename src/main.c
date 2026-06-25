@@ -51,7 +51,7 @@ void cleanup(Gameplay* _gameplay)
 }
 
 /**
- * Loads settings and list of words
+ * Load settings and list of words
  * @param _gameplay `Gameplay` struct
  * @param _network `Network` struct
  * @param path path to the `.json` file
