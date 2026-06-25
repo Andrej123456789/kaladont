@@ -10,7 +10,7 @@
 struct Gameplay;
 
 #define UNUSED(x) (void)(x)
-#define WORD_LIMIT 62
+#define WORD_LIMIT 63
 
 /* ------------------------------------ */
 
