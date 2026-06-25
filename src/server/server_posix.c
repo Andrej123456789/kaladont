@@ -22,7 +22,7 @@
 #include "../headers/gameplay.h"
 
 /**
- * Enable non-blocking mode on a file descriptor.
+ * Enables non-blocking mode on a file descriptor
  * @param fd File descriptor to set.
  * @return int
  */
@@ -136,7 +136,7 @@ void net_poll_clients(Gameplay* g)
 }
 
 /**
- * Format a message and sends it over a socket.
+ * Formats a message and sends it over a socket
  * @param fd file descriptor
  * @param fmt message
  * @param ap variable argument list

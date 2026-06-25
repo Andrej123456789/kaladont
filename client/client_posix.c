@@ -20,7 +20,7 @@
 #define BUF (WORD_SIZE + 1)
 
 /**
- * Enables non-blocking mode on a file descriptor.
+ * Enables non-blocking mode on a file descriptor
  * @param fd File descriptor to set.
  * @return int
  */

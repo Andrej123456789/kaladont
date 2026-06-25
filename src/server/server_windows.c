@@ -18,7 +18,7 @@
 #include "../headers/gameplay.h"
 
 /**
- * Enable non-blocking mode on a socket.
+ * Enables non-blocking mode on a socket
  * @param s SOCKET
  * @return int
  */
