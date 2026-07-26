@@ -126,7 +126,7 @@ int start(Gameplay* _gameplay, Network* _network, char* path)
 
         else if (strcmp(key, "computer") == 0)
         {
-            struct json_object* computer;
+            struct json_object* computer = NULL;
 
             struct json_object_iterator it2;
             struct json_object_iterator itEnd2;
@@ -159,7 +159,7 @@ int start(Gameplay* _gameplay, Network* _network, char* path)
 
         else if (strcmp(key, "network") == 0)
         {
-            struct json_object* network;
+            struct json_object* network = NULL;
 
             struct json_object_iterator it2;
             struct json_object_iterator itEnd2;
