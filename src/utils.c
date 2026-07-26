@@ -64,7 +64,7 @@ void get_first_N_characters(const char* str, size_t N, char* buffer)
 {
     size_t len = strlen(str);
     if (N > len) N = len;
-    strncpy(buffer, str, N);
+    memcpy(buffer, str, N);
     buffer[N] = '\0';
 }
 
@@ -72,7 +72,7 @@ void get_last_N_characters(const char* str, size_t N, char* buffer)
 {
     size_t len = strlen(str);
     if (N > len) N = len;
-    strncpy(buffer, str + len - N, N);
+    memcpy(buffer, str + len - N, N);
     buffer[N] = '\0';
 }
 
