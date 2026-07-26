@@ -49,7 +49,7 @@ cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*)*
     for (size_t i = 0; i < cvector_size(*words); i++)
     {
         char buffer[3];
-        get_first_N_characters((*words)[i], 2, buffer, sizeof(buffer));
+        get_first_N_characters((*words)[i], 2, buffer);
  
         if (strcmp(buffer, prefix) == 0)
         {
@@ -60,48 +60,18 @@ cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*)*
     return my_words;
 }
 
-void get_first_N_characters(const char* str, size_t N, char* buffer, size_t buffer_size) 
+void get_first_N_characters(const char* str, int N, char* buffer) 
 {
-    if (str == NULL || buffer == NULL || buffer_size == 0)
-    {
-        return;
-    }
-
-    size_t len = strlen(str);
-
-    if (N > len)
-    {
-        N = len;
-    }
-
-    if (N >= buffer_size)
-    {
-        N = buffer_size - 1;
-    }
-
+    int len = strlen(str);
+    if (N > len) N = len;
     strncpy(buffer, str, N);
     buffer[N] = '\0';
 }
 
-void get_last_N_characters(const char* str, size_t N, char* buffer, size_t buffer_size)
+void get_last_N_characters(const char* str, int N, char* buffer) 
 {
-    if (str == NULL || buffer == NULL || buffer_size == 0)
-    {
-        return;
-    }
-
-    size_t len = strlen(str);
-
-    if (N > len)
-    {
-        N = len;
-    }
-
-    if (N >= buffer_size)
-    {
-        N = buffer_size - 1;
-    }
-
+    int len = strlen(str);
+    if (N > len) N = len;
     strncpy(buffer, str + len - N, N);
     buffer[N] = '\0';
 }
