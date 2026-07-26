@@ -19,7 +19,7 @@
 int16_t evaluate_word(char* word)
 {
     char buffer[3];
-    get_last_N_characters(word, 2, buffer);
+    get_last_N_characters(word, 2, buffer, sizeof(buffer));
 
     if (strcmp(buffer, "nt") == 0)
     {
@@ -42,7 +42,7 @@ int16_t search(Gameplay* _gameplay, char* best_word, uint16_t depth)
     }
 
     char buffer[3];
-    get_last_N_characters(_gameplay->current_word, 2, buffer);
+    get_last_N_characters(_gameplay->current_word, 2, buffer, sizeof(buffer));
     
     cvector_vector_type(char*) possible_words = NULL;
     possible_words = get_all_words_starting_on(&_gameplay->words, buffer);
@@ -92,7 +92,7 @@ int16_t search_debug(Gameplay* _gameplay, char* best_word, uint16_t depth, uint1
     }
 
     char buffer[3];
-    get_last_N_characters(_gameplay->current_word, 2, buffer);
+    get_last_N_characters(_gameplay->current_word, 2, buffer, sizeof(buffer));
 
     cvector_vector_type(char*) possible_words = NULL;
     possible_words = get_all_words_starting_on(&_gameplay->words, buffer);
@@ -141,7 +141,7 @@ int16_t search_debug(Gameplay* _gameplay, char* best_word, uint16_t depth, uint1
 void computer_turn(Gameplay* _gameplay, char* word)
 {
     char buffer[3];
-    get_last_N_characters(_gameplay->current_word, 2, buffer);
+    get_last_N_characters(_gameplay->current_word, 2, buffer, sizeof(buffer));
 
     cvector_vector_type(char*) possible_words = NULL;
     possible_words = get_all_words_starting_on(&_gameplay->words, buffer);
@@ -157,7 +157,7 @@ void computer_turn(Gameplay* _gameplay, char* word)
     for (size_t i = 0; i < length; i++)
     {
         buffer[0] = '\0';
-        get_last_N_characters(possible_words[i], 2, buffer);
+        get_last_N_characters(possible_words[i], 2, buffer, sizeof(buffer));
 
         if (strcmp(buffer, "nt") == 0)
         {

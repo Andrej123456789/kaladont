@@ -32,7 +32,7 @@ void next_player(Gameplay* _gameplay)
 
 char* random_word(Gameplay* _gameplay)
 {
-    srand(time(0));
+    srand((unsigned int)time(0));
 
     size_t size = cvector_size(_gameplay->words);
     if (size == 0)
@@ -101,8 +101,8 @@ int gameplay(Gameplay* _gameplay, Network* _network, char* input)
     char first_buffer[3];
     char last_buffer[3];
 
-    get_first_N_characters(input, 2, first_buffer);
-    get_last_N_characters(_gameplay->current_word, 2, last_buffer);
+    get_first_N_characters(input, 2, first_buffer, sizeof(first_buffer));
+    get_last_N_characters(_gameplay->current_word, 2, last_buffer, sizeof(last_buffer));
 
     if (strcmp(first_buffer, last_buffer) == 0 && 
         find_element(&_gameplay->words, input)  && 
@@ -110,7 +110,7 @@ int gameplay(Gameplay* _gameplay, Network* _network, char* input)
     {
         erase_element(&_gameplay->words, input);
 
-        get_last_N_characters(input, 2, last_buffer);
+        get_last_N_characters(input, 2, last_buffer, sizeof(last_buffer));
         if (strcmp(last_buffer, "nt") == 0)
         {
             if (strcmp(input, "kaladont") == 0 && _gameplay->kaladont_allowed == false)

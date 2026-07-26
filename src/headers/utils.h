@@ -40,18 +40,20 @@ cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*)*
  * @param input string
  * @param N number of characters
  * @param buffer where result will be stored (buffer must have space for N+1 chars)
+ * @param buffer_size size of the buffer where result will be stored
  * @return void
 */
-void get_first_N_characters(const char* str, int N, char* buffer);
+void get_first_N_characters(const char* str, size_t N, char* buffer, size_t buffer_size);
 
 /**
  * Get last N characters
  * @param input string
  * @param N number of characters we are comparing
  * @param buffer where result will be stored (buffer must have space for N+1 chars)
+ * @param buffer_size size of the buffer where result will be stored
  * @return void
 */
-void get_last_N_characters(const char* str, int N, char* buffer);
+void get_last_N_characters(const char* str, size_t N, char* buffer, size_t buffer_size);
 
 /**
  * Finds minimum value between a and b
