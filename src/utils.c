@@ -60,17 +60,17 @@ cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*)*
     return my_words;
 }
 
-void get_first_N_characters(const char* str, int N, char* buffer) 
+void get_first_N_characters(const char* str, size_t N, char* buffer) 
 {
-    int len = strlen(str);
+    size_t len = strlen(str);
     if (N > len) N = len;
     strncpy(buffer, str, N);
     buffer[N] = '\0';
 }
 
-void get_last_N_characters(const char* str, int N, char* buffer) 
+void get_last_N_characters(const char* str, size_t N, char* buffer) 
 {
-    int len = strlen(str);
+    size_t len = strlen(str);
     if (N > len) N = len;
     strncpy(buffer, str + len - N, N);
     buffer[N] = '\0';

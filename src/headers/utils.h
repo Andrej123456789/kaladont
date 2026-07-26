@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <stddef.h>
+
 #include "c_vector.h"
 
 /**
@@ -42,7 +44,7 @@ cvector_vector_type(char*) get_all_words_starting_on(cvector_vector_type(char*)*
  * @param buffer where result will be stored (buffer must have space for N+1 chars)
  * @return void
 */
-void get_first_N_characters(const char* str, int N, char* buffer);
+void get_first_N_characters(const char* str, size_t N, char* buffer);
 
 /**
  * Get last N characters
@@ -51,7 +53,7 @@ void get_first_N_characters(const char* str, int N, char* buffer);
  * @param buffer where result will be stored (buffer must have space for N+1 chars)
  * @return void
 */
-void get_last_N_characters(const char* str, int N, char* buffer);
+void get_last_N_characters(const char* str, size_t N, char* buffer);
 
 /**
  * Finds minimum value between a and b
