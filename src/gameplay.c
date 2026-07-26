@@ -32,7 +32,7 @@ void next_player(Gameplay* _gameplay)
 
 char* random_word(Gameplay* _gameplay)
 {
-    srand(time(0));
+    srand((unsigned int)time(0));
 
     size_t size = cvector_size(_gameplay->words);
     if (size == 0)
