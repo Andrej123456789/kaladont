@@ -32,7 +32,7 @@ void next_player(Gameplay* _gameplay)
 
 char* random_word(Gameplay* _gameplay)
 {
-    srand((unsigned int)time(0));
+    srand(time(0));
 
     size_t size = cvector_size(_gameplay->words);
     if (size == 0)
@@ -151,7 +151,7 @@ int gameplay(Gameplay* _gameplay, Network* _network, char* input)
     return 0;
 }
 
-void gameplay_entry(Gameplay* _gameplay,Network* _network)
+void gameplay_entry(Gameplay* _gameplay, Network* _network)
 {
     bool game_finished = false;
 
