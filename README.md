@@ -81,7 +81,7 @@
   "kaladont_allowed": true, // is it allowed to say word `kaladont`
   "wait_for_correct_word": false, // should we wait for player to say correct word
 
-  "words_path": ["settings/words.txt"], // paths to the text files containing words, every line contains one word
+  "words_path": ["settings/words.txt"], // paths to the text files containing words from the current working directory, every line contains one word
 
   "computer": [
     {
